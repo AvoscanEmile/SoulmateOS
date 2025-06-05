@@ -4,30 +4,34 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 * * *
 
-### Phase 0 — Bootstrap and Repo Initialization
+### Phase 0 — Github repo creation
 
-**Goal:** Establish Git, project folders, and documentation.
+**Goal:** Create the github repo with the basic structure, and the initial documentation. 
 
-- Install AlmaLinux Minimal
-    
-- Initialize Git and connect to remote
-    
-- Create `scripts/`, `config/`, `docs/`, etc.
+- Add every relevant folder the project will have
+
+- Add architecture.md, changelog.md, and roadmap.md to /docs
     
 - Write initial `README.md`
+
+- Choose a license. 
     
-- **Version Tag:** `0.0.1`
+- **Version Tag:** `0.1.0`
     
 
 * * *
 
-### Phase 1 — Window Manager and Graphical Base
+### Phase 1 — AlmaLinux installation, git setup, AwesomeWM installation
 
-**Goal:** Functional graphical desktop using AwesomeWM.
+**Goal:** Set the barebones of the project in place. 
+
+- Install Alma Linux
+
+- Setup the local repo, and configure it so when its necessary the commits to the actual github page are easy to handle.
 
 - Install AwesomeWM and X11
     
-- Configure `.xinitrc` or login manager
+- Install a login manager, a lightweight one
     
 - Boot into graphical environment
     
