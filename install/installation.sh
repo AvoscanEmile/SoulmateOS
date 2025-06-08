@@ -65,7 +65,7 @@ Keywords=wm;tiling;
 EOF
 
 # 7. Reboot prompt 
-printf "\n✅ Installation complete.\n"
+printf "\n Installation complete.\n"
 read -p "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
   y|Y ) echo "Rebooting..."; reboot;;
