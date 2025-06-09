@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Created `installation.sh`, the main script for installing SoulMateOS. Currently takes you from minimal install into a working lightdm login screen and a working qtile desktop.
 - Created `install/README.md` where the installation process is explained.
-- Created `03-failed-awesome-attempt.md` and `04-succesful-qtile-installation` inside `/devlogs`.
+- Created `03-failed-awesome-attempt.md` and `04-succesful-qtile-installation.md` inside `/devlogs`.
 ### Changed 
 - Changed `CHANGELOG.md`, `architecture.md` and `roadmap.md` in `/docs` to reflect the transition from AwesomeWM into Qtile.
 ### Removed
