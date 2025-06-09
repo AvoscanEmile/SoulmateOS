@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created base folder structure for SoulmateOS with placeholder `.gitkeep` files.
 - Initialized repository with LICENSE and README.
 - Created initial `CHANGELOG.md`, `architecture.md` and `roadmap.md` in `/docs`.
-- Created `01-intro-vision.md` and `02-initial-repository-setup` inside `/devlogs`
+- Created `01-intro-vision.md` and `02-initial-repository-setup.md` inside `/devlogs`
 
 ## [0.0.2] - 2025-June-08
 ### Added
