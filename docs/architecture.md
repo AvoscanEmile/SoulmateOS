@@ -13,11 +13,13 @@ The focus is on **manual configuration**, **sane defaults**, and a **harmonized 
 - A downstream RHEL rebuild that provides enterprise-grade robustness
 - Easy to script and reproduce across systems
 
-### Window Manager: AwesomeWM
+### Window Manager: Qtile
 - Tiling window manager chosen for:
-  - Scriptability in Lua
-  - Performance and responsiveness
-  - High configurability and minimal dependencies
+  - Scriptability in Python.
+  - Performance and responsiveness, with asynchronous event handling
+  - Extensive configurability via python, with modular components
+  - Minimal Dependencies, X11-native with wayland support.
+  - Active development and modern design, built around extensibility. 
 
 ### Package Philosophy
 - No full DEs (GNOME, KDE); instead, curated standalone tools
