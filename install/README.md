@@ -1,6 +1,6 @@
 # SoulmateOS Minimal Installer
 
-This repository provides a streamlined script to transform a **minimal AlmaLinux 9.6 installation** into a functional graphical environment using **LightDM** and **Qtile**.
+This folder provides a streamlined script to transform a **minimal AlmaLinux 9.6 installation** into a functional graphical environment using **LightDM** and **Qtile**.
 
 ---
 
