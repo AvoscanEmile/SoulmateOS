@@ -67,7 +67,8 @@ EOF
 # 7. Minimal single-user Nix installation for AlmaLinux 9.6
 # a. Create /nix store directory with current user permissions and call user-nix-setup at user-level
 install -d -m755 -o "$SUDO_UID" -g "$SUDO_GID" /nix
-sudo -u "$SUDO_USER" bash /home/"$SUDO_USER"/user-nix-setup.sh
+USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+sudo -u "$SUDO_USER" bash "$USER_HOME/SoulmateOS/install/user-nix-setup.sh"
 
 # 8. Reboot prompt 
 printf "\n Installation complete.\n"
