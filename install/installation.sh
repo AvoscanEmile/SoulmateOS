@@ -69,7 +69,7 @@ EOF
 install -d -m755 -o "$(id -u)" -g "$(id -g)" /nix
 sudo -u "$SUDO_USER" bash /home/"$SUDO_USER"/user-nix-setup.sh
 
-# 7. Reboot prompt 
+# 8. Reboot prompt 
 printf "\n Installation complete.\n"
 read -p "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
