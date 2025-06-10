@@ -6,4 +6,5 @@ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daem
 
 # 2. Source Nix into the current shell and persist it
 . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-source "$HOME/.nix-profile/etc/profile.d/nix.sh" >> ~/.bashrc
+echo 'source "$HOME/.nix-profile/etc/profile.d/nix.sh"' >> "$HOME/.bashrc"
+
