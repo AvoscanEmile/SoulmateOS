@@ -66,7 +66,7 @@ EOF
 
 # 7. Minimal single-user Nix installation for AlmaLinux 9.6
 # a. Create /nix store directory with current user permissions and call user-nix-setup at user-level
-install -d -m755 -o "$(id -u)" -g "$(id -g)" /nix
+install -d -m755 -o "$SUDO_UID" -g "$SUDO_GID" /nix
 sudo -u "$SUDO_USER" bash /home/"$SUDO_USER"/user-nix-setup.sh
 
 # 8. Reboot prompt 
