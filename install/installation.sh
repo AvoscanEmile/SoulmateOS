@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 # Ensure the script is run as root (or via sudo)
 if [ "$EUID" -ne 0 ]; then
   echo "Please run this script as root or via sudo."
@@ -63,6 +63,11 @@ Exec=dbus-run-session qtile start
 Type=Application
 Keywords=wm;tiling;
 EOF
+
+# 7. Minimal single-user Nix installation for AlmaLinux 9.6
+# a. Create /nix store directory with current user permissions and call user-nix-setup at user-level
+install -d -m755 -o "$(id -u)" -g "$(id -g)" /nix
+sudo -u "$SUDO_USER" bash /home/"$SUDO_USER"/user-nix-setup.sh
 
 # 7. Reboot prompt 
 printf "\n Installation complete.\n"
