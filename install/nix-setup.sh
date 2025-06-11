@@ -14,8 +14,9 @@ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon 
 sudo ausearch -m avc -ts today | audit2allow -M nix-install
 sudo semodule -i nix-install.pp
 
-# 5. Make nix work without reboot
+# 5. Load nix and install rofi
 source /etc/profile.d/nix.sh
+nix-env -iA nixpkgs.rofi
 
 # 6. Restore SELinux to enforcing mode
 sudo setenforce 1
