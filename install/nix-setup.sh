@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 1. Install prerequisites
-sudo dnf install -y curl tar policycoreutils-python-utils
+sudo dnf install -y tar policycoreutils-python-utils
 
 # 2. Temporarily switch SELinux to permissive so installer can run
 sudo setenforce 0
