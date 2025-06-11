@@ -14,16 +14,8 @@ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon 
 sudo ausearch -m avc -ts today | audit2allow -M nix-install
 sudo semodule -i nix-install.pp
 
-# 5. Persist the Nix environment for all users via /etc/profile.d
-sudo tee /etc/profile.d/nix.sh << 'EOF'
-source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-EOF
-chmod 644 /etc/profile.d/nix.sh
-
-# 6. Ensure current user’s future shells loads nix properly
-# USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
-# echo 'source /etc/profile.d/nix.sh' >> "$USER_HOME/.bashrc"
-# chown "$SUDO_USER":"$SUDO_USER" "$USER_HOME/.bashrc"
+# 5. Make nix work without reboot
+source /etc/profile.d/nix.sh
 
 # 7. Restore SELinux to enforcing mode
 sudo setenforce 1
