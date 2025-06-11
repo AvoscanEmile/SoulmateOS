@@ -33,7 +33,6 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 **Goal:** Add foundational system tools to ensure a robust and manageable base. Add git to host a local repo, to keep track of any config changes. 
 
-* Git setup 
 * Terminal emulator
 * File manager
 * Text editor
@@ -42,10 +41,7 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * Disk utility
 * Time synchronization daemon (e.g., chrony or ntp)
 * Package manager plugins (preinstalled, verify only)
-* Print service support (CUPS)
 * Log management tools (journalctl, logrotate)
-* Man page viewer (man-db)
-* **Optional:** Basic development tools (gcc, make, etc.) and package manager frontend
 * **Version Tag:** `0.3.0`
 
 ---
