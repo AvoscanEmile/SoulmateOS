@@ -108,10 +108,11 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 ---
 
-### Phase 7 — Automation and Reproducibility
+### Phase 7 — Automation, Optimization and Reproducibility
 
-**Goal:** Automate deployment of the entire environment.
+**Goal:** Optimize and automate deployment of the entire environment.
 
+* Minimize default packages with the usage of dng-graph
 * Bash or Ansible-based installer
 * Dotfile deployment
 * Scripted security and config setup
