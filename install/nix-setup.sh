@@ -17,7 +17,7 @@ sudo semodule -i nix-install.pp
 # 5. Make nix work without reboot
 source /etc/profile.d/nix.sh
 
-# 7. Restore SELinux to enforcing mode
+# 6. Restore SELinux to enforcing mode
 sudo setenforce 1
 
 echo "Nix multi-user install complete. SELinux policy updated and enforcing."
