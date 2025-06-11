@@ -69,6 +69,10 @@ EOF
 echo "Running Nix setup script..."
 bash ~/soulmateos/install/nix-setup.sh
 
+# 8. Basic Apps Installation
+echo "Installing basic apps..."
+sudo dnf install kitty geany thunar btop gnome-disk-utility
+
 # 8. Reboot prompt
 echo -e "\nInstallation complete."
 read -rp "Would you like to reboot now? [y/N]: " choice
