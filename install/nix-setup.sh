@@ -26,6 +26,6 @@ chmod 644 /etc/profile.d/nix.sh
 # chown "$SUDO_USER":"$SUDO_USER" "$USER_HOME/.bashrc"
 
 # 7. Restore SELinux to enforcing mode
-setenforce 1
+sudo setenforce 1
 
 echo "Nix multi-user install complete. SELinux policy updated and enforcing."
