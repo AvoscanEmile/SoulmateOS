@@ -19,7 +19,6 @@ semodule -i nix-install.pp
 
 # 5. Persist the Nix environment for all users via /etc/profile.d
 tee /etc/profile.d/nix.sh << 'EOF'
-# Nix profile for all users
 source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 EOF
 chmod 644 /etc/profile.d/nix.sh
