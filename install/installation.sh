@@ -67,7 +67,7 @@ EOF
 
 # 7. Multi-user nix installation
 echo "Running Nix setup script..."
-bash /soulmateos/install/nix-setup.sh
+bash ~/soulmateos/install/nix-setup.sh
 
 # 8. Reboot prompt
 echo -e "\nInstallation complete."
