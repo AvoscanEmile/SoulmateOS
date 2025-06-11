@@ -66,7 +66,7 @@ EOF
 
 # 7. Multi-User nix installation
 USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
-bash "$USER_HOME/SoulmateOS/install/nix-setup.sh"
+bash "$USER_HOME/soulmateos/install/nix-setup.sh"
 
 # 8. Reboot prompt 
 printf "\n Installation complete.\n"
