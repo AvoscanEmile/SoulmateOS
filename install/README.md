@@ -18,5 +18,5 @@ Run the following commands from your fresh AlmaLinux installation:
 
 ```bash
 sudo dnf install -y git
-git clone https://github.com/AvoscanEmile/SoulmateOS.git
-sudo SoulmateOS/install/installation.sh
+git clone https://github.com/AvoscanEmile/soulmateos.git
+sudo soulmateos/install/installation.sh
