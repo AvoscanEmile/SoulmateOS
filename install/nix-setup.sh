@@ -8,7 +8,7 @@ sudo dnf install -y curl tar policycoreutils-python-utils
 sudo setenforce 0
 
 # 3. Install Nix in multi-user (daemon) mode
-sudo sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon --yes
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon --yes
 
 # 4. Capture SELinux denials and generate a custom policy module
 sudo ausearch -m avc -ts today | audit2allow -M nix-install
