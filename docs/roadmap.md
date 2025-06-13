@@ -57,8 +57,7 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * Archiver
 * Password manager
 * PDF viewer
-* Calendar or task manager (optional)
-* GUI settings interface for Qtile (optional)
+* Calendar
 * **Version Tag:** `0.4.0`
 
 ---
