@@ -67,7 +67,10 @@ EOF
 
 # 7. Multi-user nix installation
 echo "Running Nix setup script..."
-bash ~/soulmateos/install/nix-setup.sh
+curl -L https://nixos.org/nix/install | sh
+. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+nix-env -iA nixpkgs.rofi
+nix-env -iA nixpkgs.celluloid
 
 # 8. Basic Apps Installation
 echo "Installing basic apps..."
