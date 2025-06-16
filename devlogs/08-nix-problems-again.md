@@ -128,11 +128,7 @@ Perform the installation of the remaining selected packages.
    * Sample GTK3 Python script and Qtile config provided.
 7. **Installed Gthumb and Firefox**
    * These two were merely installed via dnf. 
-
-### 💡 Reflections
-
-* **Separation of concerns** is powerful: UI (calendar widget) vs. logic (calcurse).
-* **GTK3/Qtile widgets** are highly customizable via CSS or Pango markup, enabling theme consistency.
-* **Reproducibility** It was clear after some testing that the single-user installation of nix is the one with the higher reproducibility. 
-* **Minimal overhead** achieved by leveraging native widgets rather than full applications for display.
+8. **Added all the selected and succesfully manually installed packages to the installation script**
+   * Via Nix: celluloid, lollypop, foliate, calcurse
+   * Via dnf: firefox, gthumb, geany-plugins-markdown, engrampa, evince, thunar-archive-plugin
 
