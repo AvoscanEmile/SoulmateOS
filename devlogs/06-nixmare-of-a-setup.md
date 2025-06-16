@@ -1,4 +1,4 @@
-# Devlog Entry 04 — Setting up the automatic installation of Nix and Rofi while avoiding manual sourcing and rebooting. 
+# Devlog Entry 06 — Setting up the automatic installation of Nix and Rofi while avoiding manual sourcing and rebooting. 
 
 **Date**: 2025-June-11  
 **Author**: Emile Avoscan  
