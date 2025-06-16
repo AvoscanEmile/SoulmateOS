@@ -1,9 +1,9 @@
 # Devlog Entry 07 — User-Level App Selection
 
-**Date**: 2025-June-16
-**Author**: Emile Avoscan
-**Entry ID**: #07
-**Target Version**: 0.4.0
+**Date**: 2025-June-16  
+**Author**: Emile Avoscan  
+**Entry ID**: #07  
+**Target Version**: 0.4.0  
 
 ### Objective
 
