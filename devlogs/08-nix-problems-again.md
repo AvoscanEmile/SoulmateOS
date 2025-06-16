@@ -1,6 +1,6 @@
 # Devlog Entry 08 — User Package Installation process. 
 
-**Date**: 2025-June-13  
+**Date**: 2025-June-16  
 **Author**: Emile Avoscan  
 **Entry ID**: #08  
 **Target Version**: 0.4.0
