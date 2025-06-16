@@ -203,12 +203,144 @@ Here’s a consolidated recap of your **final selections**, the **reasons** behi
   * GParted
   * CLI tools (`parted`, `fdisk`, `mkfs`, `fsck`)—fallback and advanced use
 
+## Additional User-Level Applications
+
+To complement the core environment, the following user-facing apps are selected for a GTK-consistent, lightweight, and privacy-aware experience:
+
+### Web Browser
+
+**Selected: Firefox**
+
+* **Reasons**:
+
+  * Robust developer tooling (Inspector, console, network analysis)
+  * Sync across devices for bookmarks, passwords, and history
+  * Actively maintained and well-supported on AlmaLinux
+
+* **Considered Alternatives**:
+
+  * LibreWolf (privacy-focused but lacks Firefox Sync)
+  * GNOME Web (limited extension ecosystem)
+
+### Media Player
+
+**Selected: Celluloid (mpv GTK frontend)**
+
+* **Reasons**:
+
+  * GTK3 themability via CSS, consistent with system theme
+  * Lightweight frontend paired with powerful mpv backend
+  * Keyboard-driven controls and minimal dependencies
+
+* **Considered Alternatives**:
+
+  * VLC (heavy dependencies)
+  * Haruna (Qt-based, not GTK-native)
+  * Direct mpv CLI (no GUI)
+
+### Music Player
+
+**Selected: Lollypop**
+
+* **Reasons**:
+
+  * GTK3-based with CSS theming support
+  * Active development and library management features
+  * Simple, intuitive UI tailored to album browsing
+
+* **Considered Alternatives**:
+
+  * Rhythmbox (older and heavier)
+  * Amberol (too minimal feature set)
+
+### Markdown Editor
+
+**Selected: Geany + Markdown Preview Plugin**
+
+* **Reasons**:
+
+  * Leverages existing Geany setup, avoiding Electron
+  * Live preview and syntax highlighting for Markdown
+  * Plugin architecture allows further extensibility
+
+* **Considered Alternatives**:
+
+  * Apostrophe (overkill for text+code editing)
+  * MarkText (Electron-based)
+
+### Image Viewer
+
+**Selected: gThumb**
+
+* **Reasons**:
+
+  * GTK-based with full-screen support and basic editing
+  * CSS theming possible via GTK
+  * Lightweight compared to other viewers
+
+* **Considered Alternatives**:
+
+  * Eye of GNOME (too minimal)
+  * Viewnior (limited features)
+  * Ristretto (XFCE-centric)
+
+### Archive Manager
+
+**Selected: Engrampa + Thunar Plugin**
+
+* **Reasons**:
+
+  * GTK3-native and integrates seamlessly with Thunar
+  * Supports most archive formats out-of-the-box
+  * The Thunar plugin provides right-click context actions
+
+* **Considered Alternatives**:
+
+  * File Roller (older GNOME tool)
+  * Xarchiver (less integrated)
+
+### Document Viewer
+
+**Selected: Evince + Foliate**
+
+* **Reasons**:
+
+  * **Evince** for PDFs: lightweight, robust GTK3 app
+  * **Foliate** for eBooks (EPUB/DJVU): CSS themable and reader-focused
+  * Combined coverage for all common document formats
+
+* **Considered Alternatives**:
+
+  * Zathura (Vim-like controls but fewer GUI features)
+  * Okular (Qt-based, heavier)
+
+### Calendar and Project Management
+
+**Selected: Calcurse**
+
+* **Reasons**:
+
+  * Powerful TUI calendar, todo, and note management
+  * Highly scriptable and integrates with Qtile widgets
+  * Avoids heavy GUI dependencies while providing full feature set
+
+* **Considered Alternatives**:
+
+  * Orage (obsolete)
+  * GNOME Calendar (tied too closely to GNOME Shell)
+  * Gsimplecal (too simplistic)
+
+
 ### 🎯 **Overall Integration Strategy**
 
-* **Toolkit Consistency**: Lean GTK (Thunar, Rofi, LightDM greeter, Geany, nm-applet, GNOME Disks) with minimal Qt/Electron only where needed
-* **Theming Pipeline**: Central `~/.config/gtk-3.0/gtk.css` (and matching Rofi `.rasi`) as single source of theming
-* **Workflow Balance**: GUI tools for broad navigation (Thunar, GParted, Conky), TUI/terminal tools for power users (kitty, btop, ncdu)
-* **Modularity**: Each component chosen for best-in-class functionality while avoiding monolithic desktop environments
+* **Toolkit Consistency**: Prioritize GTK-native applications (Thunar, Rofi, LightDM greeter, Geany, nm‑applet, GNOME Disks, Firefox, Celluloid, Lollypop, gThumb, Engrampa, Evince/Foliate, Calcurse) with minimal Qt/Electron only where indispensable.
+* **Theming Pipeline**: Centralize all theming in `~/.config/gtk-3.0/gtk.css` (and matching Rofi `.rasi`), ensuring CSS tweaks propagate across terminal, file manager, greeter, and viewer interfaces.
+* **Workflow Balance**:
+
+  * **GUI for exploration & media**: Thunar, Firefox, Celluloid, Lollypop, gThumb, Engrampa, Evince/Foliate
+  * **TUI & Terminal for power tasks**: Kitty, btop, ncdu, Calcurse, Geany (text-mode view)
+* **Modularity & Privacy**: Each app selected for best-in-class functionality—no monolithic DE—while avoiding Electron/Snap/Flatpak to reduce attack surface and maintain lean resource usage.
+* **Extensibility**: Leverage Qtile Python scripts and plugin hooks (Rofi modes, Thunar custom actions, Calcurse hooks) to weave these standalone tools into cohesive, automated workflows.
 
 ## Versioning and Git Strategy
 
