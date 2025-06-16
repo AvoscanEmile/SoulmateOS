@@ -71,7 +71,7 @@ bash ~/soulmateos/install/nix-setup.sh
 
 # 8. Basic Apps Installation
 echo "Installing basic apps..."
-sudo dnf install kitty geany thunar btop gnome-disk-utility
+sudo dnf install -y kitty geany thunar btop gnome-disk-utility
 
 # 8. Reboot prompt
 echo -e "\nInstallation complete."
