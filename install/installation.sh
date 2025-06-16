@@ -69,14 +69,18 @@ EOF
 echo "Running Nix setup script..."
 curl -L https://nixos.org/nix/install | sh
 . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-nix-env -iA nixpkgs.rofi
-nix-env -iA nixpkgs.celluloid
 
 # 8. Basic Apps Installation
 echo "Installing basic apps..."
 sudo dnf install -y kitty geany thunar btop gnome-disk-utility
+nix-env -iA nixpkgs.rofi
 
-# 8. Reboot prompt
+# 9. Installing user-level apps
+echo "Installing user-level apps..."
+nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse
+sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archive-plugin
+
+# 10. Reboot prompt
 echo -e "\nInstallation complete."
 read -rp "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
