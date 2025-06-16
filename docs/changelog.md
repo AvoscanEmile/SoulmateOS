@@ -35,3 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `changelog.md`, `architecture.md` and `roadmap.md` in `/docs` to reflect the progress of the project.
 - Changed `installation.sh` to call `nix-setup.sh` when needed and to install the relevant packages selected in `05-package-selection.md`. 
 - Changed `/install/README.md` to make the installation process more consistent since while testing I find out caps were a problem.
+
+## [0.4.0] - 2025-June-16
+### Added
+- Created `07-user-package-selection.md` and `08-nix-problems-again.md` inside `/devlogs`.
+### Changed 
+- Changed `installation.sh` to add new packages into the installation process, change nix from multi-user to single-user and remove RPM FUSION. 
+- Changed `CHANGELOG.md`, `architecture.md` and `roadmap.md` in `/docs` to reflect the progress made to the project.
+### Removed
+- Removed `nix-setup.sh` since the single-user installation is simpler and fitted easily within `installation.sh`.
