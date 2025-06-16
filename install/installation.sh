@@ -11,12 +11,6 @@ trap 'kill $SUDO_KEEPALIVE' EXIT
 echo "Enabling DNF repositories..."
 sudo dnf config-manager --set-enabled baseos appstream crb extras
 sudo dnf install -y epel-release
-sudo dnf install -y distribution-gpg-keys
-sudo rpmkeys --import /usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-el-$(rpm -E %rhel)
-sudo rpmkeys --import /usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-el-$(rpm -E %rhel)
-sudo dnf --setopt=localpkg_gpgcheck=1 install -y \
-  https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm \
-  https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
 
 # 2. Update and install X11 + LightDM
 echo "Installing X11 and LightDM..."
