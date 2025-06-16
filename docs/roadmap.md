@@ -80,9 +80,9 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 ---
 
-### Phase 5 — Theming and Visual Cohesion
+### Phase 5 — Theming, Visual Cohesion, Widget Addition and Error Correction.
 
-**Goal:** Build a unified aesthetic.
+**Goal:** Build a unified aesthetic, a base widget environment and resolve any problems related to app usage.
 
 * GTK/QT theme
 * Fonts and icons
