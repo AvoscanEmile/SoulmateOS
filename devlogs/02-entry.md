@@ -2,7 +2,7 @@
 
 **Date**: 2025-06-04  
 **Author**: Emile Avoscan  
-**Version**: 0.1.0  
+**Target Version**: 0.1.0  
 
 ## Laying the Foundation
 
