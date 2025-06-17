@@ -1,8 +1,8 @@
 # Devlog 01 — Vision, Philosophy & Foundations
 
-**Date**: 2025-06-04
-**Author**: Emile Avoscan
-**Version**: 0.1.0
+**Date**: 2025-06-04  
+**Author**: Emile Avoscan  
+**Version**: 0.1.0  
 
 ## A System Worth Owning
 
