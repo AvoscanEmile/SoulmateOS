@@ -77,7 +77,7 @@ sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archiv
 # 10. Installing UX enhancers and running the symlinker to put config files in the right place
 echo "Installing UX enhancers and running the symlinker..."
 sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
-bash ~/soulmateos/install-links.sh
+bash ~/soulmateos/install/install-links.sh
 
 # 11. Reboot prompt
 echo -e "\nInstallation complete. You might remove the soulmateos repository from your system"
