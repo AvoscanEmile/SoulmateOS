@@ -15,6 +15,7 @@ declare -A LINKS=(
 echo "Copying configs: $REPO_DIR/config → $MASTER"
 mkdir -p "$MASTER"
 rsync -av --delete "$REPO_DIR/config/" "$MASTER/"
+chmod a+x ~/.config/soulmateos/qtile/autostart.sh
 
 # 4) Create symlinks
 echo "Creating symlinks:"
