@@ -80,7 +80,7 @@ sudo dnf install -y xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
 bash install-links.sh
 
 # 11. Reboot prompt
-echo -e "\nInstallation complete. You might remove the soulmateos repository from your system if you want"
+echo -e "\nInstallation complete. You might remove the soulmateos repository from your system"
 read -rp "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
   y|Y ) echo "Rebooting..."; sudo reboot;;
