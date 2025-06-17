@@ -74,8 +74,13 @@ echo "Installing user-level apps..."
 nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse
 sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archive-plugin
 
-# 10. Reboot prompt
-echo -e "\nInstallation complete."
+# 10. Installing UX enhancers and running the symlinker to put config files in the right place
+echo "Installing UX enhancers and running the symlinker..."
+sudo dnf install -y xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
+bash install-links.sh
+
+# 11. Reboot prompt
+echo -e "\nInstallation complete. You might remove the soulmateos repository from your system if you want"
 read -rp "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
   y|Y ) echo "Rebooting..."; sudo reboot;;
