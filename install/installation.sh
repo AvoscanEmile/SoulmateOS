@@ -66,7 +66,7 @@ curl -L https://nixos.org/nix/install | sh
 
 # 8. Basic Apps Installation
 echo "Installing basic apps..."
-sudo dnf install -y kitty geany thunar btop gnome-disk-utility
+sudo dnf install -y kitty geany thunar btop gnome-disk-utility gthumb
 nix-env -iA nixpkgs.rofi
 
 # 9. Installing user-level apps
