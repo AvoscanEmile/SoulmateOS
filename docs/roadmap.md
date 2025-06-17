@@ -70,7 +70,6 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * Screenshot tool
 * Clipboard manager
 * Autostart configuration
-* Idle monitor/screen locker (e.g., xss-lock + i3lock or alternatives)
 * **Version Tag:** `0.5.0`
 
 ---
