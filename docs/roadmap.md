@@ -84,6 +84,7 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 **Goal:** Build a unified aesthetic, a base widget environment and resolve any problems related to app usage.
 
+* Build relevant custom widgets (e. g. volume control). 
 * GTK/QT theme
 * Fonts and icons
 * Wallpaper, cursor
