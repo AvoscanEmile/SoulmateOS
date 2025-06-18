@@ -44,3 +44,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `CHANGELOG.md`, `architecture.md` and `roadmap.md` in `/docs` to reflect the progress made to the project.
 ### Removed
 - Removed `nix-setup.sh` since the single-user installation is simpler and fitted easily within `installation.sh`.
+
+## [0.5.0] - 2025-June-17
+### Added
+- Created `09-entry.md` inside `/devlogs`.
+- Created `/install/install-links.sh`, the main script for creating simlinks to config and theme files.
+- Created `/config/qtile/autostart.sh` and `/config/qtile/config.py`, both of them being files for the qtile custom configuration.
+- Created `/config/services/org.freedesktop.Notifications.service` the required service for the notification daemon to work. 
+### Changed 
+- Changed `installation.sh` to call `install-links.sh` before finishing the script. 
+- Changed `CHANGELOG.md`, `architecture.md` and `roadmap.md` in `/docs` to reflect the progress made to the project.
+- Changed all previous entries inside `/devlogs` so they follow a more standard naming convetion and structure. 
+### Removed
+- Removed `.gitkeep` files that were no longer necessary.
