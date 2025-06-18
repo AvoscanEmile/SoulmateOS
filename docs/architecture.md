@@ -330,6 +330,43 @@ To complement the core environment, the following user-facing apps are selected 
   * GNOME Calendar (tied too closely to GNOME Shell)
   * Gsimplecal (too simplistic)
 
+## UX Enhancers Package Selection
+
+This section documents the rationale behind selecting auxiliary user experience (UX) tools for **SoulmateOS**, including clipboard managers, volume controls, screen lockers, and notification daemons. These tools are chosen for their minimal footprint, compatibility with a Qtile + X11 stack, and alignment with the system’s GTK3-oriented aesthetic goals.
+
+### Clipboard Manager
+
+- **Selected**: `xfce4-clipman`
+- **Alternatives Considered**:
+  - `clipit`: Not available in AlmaLinux repositories
+  - `copyq`: Qt-based, introduces unnecessary dependencies
+- **Rationale**: Despite being an XFCE panel plugin, `xfce4-clipman` runs independently and integrates well into a standalone Qtile session. It supports clipboard history, primary/clipboard selection, and a system tray icon with low resource usage.
+
+### Notification Daemon
+
+- **Selected**: `xfce4-notifyd`
+- **Alternatives Considered**:
+  - `dunst`: Highly configurable, but lacks native GTK styling
+  - `mako`: Wayland-only
+- **Rationale**: `xfce4-notifyd` provides out-of-the-box GTK3 support, integrates well with accessibility tools, and requires no additional configuration when started via session hooks.
+
+### Volume Control
+
+- **Selected**: Custom Qtile widget with `wpctl` backend (planned)
+- **Alternatives Considered**:
+  - `volumeicon`: Not available in AlmaLinux
+  - `pavucontrol`: Heavy, but installed for GUI fallback
+  - XFCE panel volume plugin: Requires full panel runtime
+- **Rationale**: The eventual goal is a fully native Qtile widget using `wpctl` for volume control under PipeWire. A minimal CLI fallback exists in the interim.
+
+### Screenshoots
+
+- **Selected**: `xfce4-screenshooter`
+- **Alternatives Considered**:
+  - `gnome-screenshot`: Dragged in GNOME dependencies
+  - `flameshot`: Qt-based, aesthetically inconsistent with the rest of the stack
+  - `scrot`: Lacks GUI and modern conveniences
+- **Rationale**: `xfce4-screenshooter` provides a well-designed GTK3-compatible GUI, supports full screen, region, and window captures, and integrates into the system tray or keybindings easily. It respects the minimal dependencies goal while offering a polished interface.
 
 ### 🎯 **Overall Integration Strategy**
 
