@@ -1,6 +1,6 @@
 # Devlog 09 — UX Enhancers, Session Polish and symlinking
 
-**Date**: 2025-06-16  
+**Date**: 2025-06-17  
 **Author**: Emile Avoscan  
 **Target Version**: 0.5.0  
 
