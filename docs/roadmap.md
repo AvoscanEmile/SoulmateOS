@@ -78,13 +78,15 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 **Goal:** Build a unified aesthetic, a base widget environment and resolve any problems related to app usage.
 
-* Build relevant custom widgets (e. g. volume control, power menu). 
-* GTK/QT theme
+* Install and theme Polybar with the following modules (power menu, workspaces, weather, date and time, network + volume)
+* Build relevant custom widgets with Eww. Build one for the each of the relevant modules (weather, date and time, network + volume)
+* GTK theming all relevant apps
 * Fonts and icons
 * Wallpaper, cursor
 * Align visuals across all apps
 * Lightweight compositor (e.g., picom) for transparency, shadows, and effects
-* Save themes in `themes/`
+* Save everything relevant in `themes/`
+* Add the symlinking and installation process to their relevant files
 * **Version Tag:** `0.6.0`
 
 ---
