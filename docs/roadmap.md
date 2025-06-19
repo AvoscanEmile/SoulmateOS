@@ -80,6 +80,8 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 
 * Install and theme Polybar with the following modules (power menu, workspaces, weather, date and time, network + volume)
 * Build relevant custom widgets with Eww. Build one for the each of the relevant modules (weather, date and time, network + volume)
+* Add a dropdown grid-like widget layout where all the system information shows up
+* Configure all relevant Qtile keybindings
 * GTK theming all relevant apps
 * Fonts and icons
 * Wallpaper, cursor
