@@ -1,28 +1,64 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1) Source & target directories
-REPO_DIR="$HOME/soulmateos"
-MASTER="$HOME/.config/soulmateos"
+# config.sh: Deploy soulmateOS configs & create symlinks.
+# Expects these env vars (set by installation.sh):
+#   REPO_DIR   — where the soulmateos repo lives (default: $HOME/soulmateos)
+#   CONFIG_DIR — where configs should be staged (default: $HOME/.config/soulmateos)
 
-# 2) Map each source (relative to $MASTER) to its live destination
+: "${REPO_DIR:=$HOME/soulmateos}"
+: "${CONFIG_DIR:=$HOME/.config/soulmateos}"
+
+# 1) Source trees
+SRC_CONFIG="$REPO_DIR/config"
+SRC_THEMES="$REPO_DIR/themes"
+
+# 2) Sanity checks
+for d in "$SRC_CONFIG" "$SRC_THEMES"; do
+  if [[ ! -d "$d" ]]; then
+    echo "Error: Source directory not found: $d" >&2
+    exit 1
+  fi
+done
+
+# 3) Deploy config and themes
+echo "→ Deploying config: $SRC_CONFIG → $CONFIG_DIR"
+mkdir -p "$CONFIG_DIR"
+rsync -av --delete "$SRC_CONFIG/" "$CONFIG_DIR/"
+
+echo "→ Deploying themes: $SRC_THEMES → $CONFIG_DIR/themes"
+mkdir -p "$CONFIG_DIR/themes"
+rsync -av --delete "$SRC_THEMES/" "$CONFIG_DIR/themes/"
+
+# 4) Make sure Qtile’s autostart is executable
+AUTOSTART="$CONFIG_DIR/qtile/autostart.sh"
+if [[ -f "$AUTOSTART" ]]; then
+  chmod +x "$AUTOSTART"
+  echo "→ Made executable: $AUTOSTART"
+else
+  echo "Warning: Qtile autostart not found at $AUTOSTART" >&2
+fi
+
+# 5) Symlink map (relative to CONFIG_DIR)
 declare -A LINKS=(
   [qtile]="$HOME/.config/qtile"
   [org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
 )
 
-# 3) Copy the master config tree
-echo "Copying configs: $REPO_DIR/config → $MASTER"
-mkdir -p "$MASTER"
-rsync -av --delete "$REPO_DIR/config/" "$MASTER/"
-chmod a+x ~/.config/soulmateos/qtile/autostart.sh
-
-# 4) Create symlinks
-echo "Creating symlinks:"
+# 6) Create symlinks
+echo "→ Creating symlinks"
 for src_rel in "${!LINKS[@]}"; do
-  SRC="$MASTER/$src_rel"
+  SRC="$CONFIG_DIR/$src_rel"
   DST="${LINKS[$src_rel]}"
+
+  if [[ ! -e "$SRC" ]]; then
+    echo "Error: Cannot link non-existent source: $SRC" >&2
+    exit 1
+  fi
+
   echo "  ↳ $SRC → $DST"
   mkdir -p "$(dirname "$DST")"
   ln -sfn "$SRC" "$DST"
 done
+
+echo "→ Configuration deployment complete."
