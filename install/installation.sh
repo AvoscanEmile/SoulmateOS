@@ -1,7 +1,62 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Prompt for sudo password once, and keep alive throughout the script
+# installation.sh: Orchestrator for soulmateOS setup
+# ----------------------------------------
+# Usage:
+#   ./installation.sh [--keep-repo] [--keep-docs] [--keep-devlogs]
+#
+# Flags:
+#   --keep-repo       Preserve the original ~/soulmateos repository after install
+#   --keep-docs       Keep docs/ in ~/.config/soulmateos/docs
+#   --keep-devlogs    Keep devlogs/ in ~/.config/soulmateos/devlogs
+#   -h, --help        Show this help message and exit
+
+usage() {
+  cat <<EOF
+Usage: $0 [--keep-repo] [--keep-docs] [--keep-devlogs]
+
+Options:
+  --keep-repo       Do not remove ~/soulmateos after installation
+  --keep-docs       Do not remove docs/ from ~/.config/soulmateos
+  --keep-devlogs    Do not remove devlogs/ from ~/.config/soulmateos
+  -h, --help        Show this help message and exit
+EOF
+  exit 1
+}
+
+# Defining relevant variables. KEEP_* are flag variables, CONFIG_DIR is the location of the config files post installation. 
+KEEP_REPO=false
+KEEP_DOCS=false
+KEEP_DEVLOGS=false
+CONFIG_DIR="$HOME/.config/soulmateos"
+
+# Parse flags
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --keep-repo)
+      KEEP_REPO=true
+      shift
+      ;;
+    --keep-docs)
+      KEEP_DOCS=true
+      shift
+      ;;
+    --keep-devlogs)
+      KEEP_DEVLOGS=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "Error: Unknown option '$1'" >&2
+      usage
+      ;;
+  esac
+done
+
+# 0. Keep sudo alive
 sudo -v
 ( while true; do sudo -n true; sleep 60; done ) &
 SUDO_KEEPALIVE=$!
@@ -12,78 +67,53 @@ echo "Enabling DNF repositories..."
 sudo dnf config-manager --set-enabled baseos appstream crb extras
 sudo dnf install -y epel-release
 
-# 2. Update and install X11 + LightDM
-echo "Installing X11 and LightDM..."
-sudo dnf update -y
-sudo dnf groupinstall -y "base-x"
-sudo dnf install -y lightdm lightdm-gtk-greeter
-sudo touch /etc/rc.d/rc.local
-sudo chmod +x /etc/rc.d/rc.local
-sudo systemctl enable lightdm
-sudo systemctl set-default graphical.target
+# 2. Run installation phases
+echo "Starting Phase 1: Graphics installation"
+bash ~/soulmateos/install/modules/graphics.sh
 
-# 3. Install Python 3.11 and build tools
-echo "Installing Python 3.11 and development tools..."
-sudo dnf install -y \
-  python3.11 python3.11-pip python3.11-devel python3.11-setuptools \
-  gcc make pkg-config libffi-devel
+echo "Starting Phase 2: Qtile installation"
+bash ~/soulmateos/install/modules/qtile.sh
 
-# 4. Install C/C++ development headers
-echo "Installing C/C++ headers and libraries..."
-sudo dnf install -y \
-  libX11-devel libXrandr-devel libXi-devel libXinerama-devel libXcursor-devel \
-  libxcb-devel xcb-util-devel xcb-util-renderutil-devel xcb-util-wm-devel \
-  cairo-devel cairo-gobject-devel pango-devel \
-  gobject-introspection-devel glib2-devel \
-  dbus-devel
+echo "Starting Phase 3: User-level apps installation"
+bash ~/soulmateos/install/modules/user.sh
 
-# 5. Install Qtile and Python bindings (as user)
-echo "Installing Python bindings and Qtile..."
-python3.11 -m pip install --upgrade pip
-python3.11 -m pip install \
-  xcffib \
-  cairocffi \
-  pangocairocffi \
-  dbus-python \
-  PyGObject==3.50.1 \
-  qtile
+echo "Starting Phase 4: Configuration deployment"
+bash ~/soulmateos/install/modules/config.sh
 
-# 6. Configure LightDM Qtile session
-echo "Configuring Qtile LightDM session..."
-sudo tee /usr/share/xsessions/qtile.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Name=Qtile
-Comment=Tiling Window Manager
-Exec=dbus-run-session qtile start
-Type=Application
-Keywords=wm;tiling;
-EOF
+# 3. Post-install cleanup
+# Checks for --keep-repo, if not used removes the soulmateos repo stored at $HOME
+echo "→ Cleaning up installation artifacts"
+if [[ "$KEEP_REPO" == false ]]; then
+  rm -rf "$HOME/soulmateos"
+  echo "Removed ~/soulmateos"
+else
+  echo "Retained ~/soulmateos"
+fi
 
-# 7. Multi-user nix installation
-echo "Running Nix setup script..."
-curl -L https://nixos.org/nix/install | sh
-. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+# Checks for --keep-docs, if not used removes the ~/.config/soulmateos/docs folder
+if [[ "$KEEP_DOCS" == false ]]; then
+  rm -rf "$CONFIG_DIR/docs"
+  echo "Removed \$CONFIG_DIR/docs"
+else
+  echo "Retained \$CONFIG_DIR/docs"
+fi
 
-# 8. Basic Apps Installation
-echo "Installing basic apps..."
-sudo dnf install -y kitty geany thunar btop gnome-disk-utility gthumb
-nix-env -iA nixpkgs.rofi
+# Checks for --keep-devlogs, if not used removes the ~/.config/soulmateos/devlogs folder
+if [[ "$KEEP_DEVLOGS" == false ]]; then
+  rm -rf "$CONFIG_DIR/devlogs"
+  echo "Removed \$CONFIG_DIR/devlogs"
+else
+  echo "Retained \$CONFIG_DIR/devlogs"
+fi
 
-# 9. Installing user-level apps
-echo "Installing user-level apps..."
-nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse
-sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archive-plugin
+# Removes the install directory for simplicity. If the user wants to retain the installation script it can do so via --keep-repo
+rm -rf "$CONFIG_DIR/install"
+echo "Removed \$CONFIG_DIR/install"
 
-# 10. Installing UX enhancers and running the symlinker to put config files in the right place
-echo "Installing UX enhancers and running the symlinker..."
-sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
-bash ~/soulmateos/install/install-links.sh
-
-# 11. Reboot prompt
-echo -e "\nInstallation complete. You might remove the soulmateos repository from your system"
+# Reboot prompt
+echo -e "\nInstallation complete."
 read -rp "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
   y|Y ) echo "Rebooting..."; sudo reboot;;
   * ) echo "Reboot skipped. You can reboot manually later with 'sudo reboot'.";;
 esac
-
