@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-trap 'echo "Failed at: $BASH_COMMAND"; kill $SUDO_KEEPALIVE' ERR EXIT
+trap 'echo "Failed at: $BASH_COMMAND"' ERR EXIT
 
 SCRIPT_VERSION="0.6.0"
 echo "soulmateOS installer v$SCRIPT_VERSION — $(date)"
