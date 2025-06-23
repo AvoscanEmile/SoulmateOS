@@ -26,6 +26,7 @@ fi
 # 3) Symlink map (relative to CONFIG_DIR)
 declare -A LINKS=(
   [config/qtile]="$HOME/.config/qtile"
+  [config/polybar]="$HOME/.config/polybar"
   [config/services/org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
 )
 
