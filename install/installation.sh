@@ -37,8 +37,9 @@ MODULES_DIR="$HOME/soulmateos/install/modules"
 
 # Verify each module is on place 
 for script in graphics qtile user config; do
-  if [[ ! -x "$MODULES_DIR/${script}.sh" ]]; then
-    echo "Error: Missing or non-executable module: $MODULES_DIR/${script}.sh" >&2
+  module="$MODULES_DIR/${script}.sh"
+  if [[ ! -f "$module" ]]; then
+    echo "Error: Missing module file: $module" >&2
     exit 1
   fi
 done
