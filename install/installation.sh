@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'echo "Failed at: $BASH_COMMAND"; kill $SUDO_KEEPALIVE' ERR EXIT
+
+SCRIPT_VERSION="0.6.0"
+echo "soulmateOS installer v$SCRIPT_VERSION — $(date)"
+echo "Errors will report the failing command thanks to ERR trap."
 
 # installation.sh: Orchestrator for soulmateOS setup
 # ----------------------------------------
@@ -25,11 +30,21 @@ EOF
   exit 1
 }
 
-# Defining relevant variables. KEEP_* are flag variables, CONFIG_DIR is the location of the config files post installation. 
-KEEP_REPO=false
-KEEP_DOCS=false
-KEEP_DEVLOGS=false
+# Declaring directories
 CONFIG_DIR="$HOME/.config/soulmateos"
+REPO_DIR="$HOME/soulmateos"
+MODULES_DIR="$HOME/soulmateos/install/modules"
+
+# Verify each module is on place 
+for script in graphics qtile user config; do
+  if [[ ! -x "$MODULES_DIR/${script}.sh" ]]; then
+    echo "Error: Missing or non-executable module: $MODULES_DIR/${script}.sh" >&2
+    exit 1
+  fi
+done
+
+# Initializing flag variables.
+KEEP_REPO=false; KEEP_DOCS=false; KEEP_DEVLOGS=false
 
 # Parse flags
 while [[ $# -gt 0 ]]; do
@@ -69,49 +84,49 @@ sudo dnf install -y epel-release
 
 # 2. Run installation phases
 echo "Starting Phase 1: Graphics installation"
-bash ~/soulmateos/install/modules/graphics.sh
+bash "$MODULES_DIR/graphics.sh"
 
 echo "Starting Phase 2: Qtile installation"
-bash ~/soulmateos/install/modules/qtile.sh
+bash "$MODULES_DIR/qtile.sh"
 
 echo "Starting Phase 3: User-level apps installation"
-bash ~/soulmateos/install/modules/user.sh
+bash "$MODULES_DIR/user.sh"
 
 echo "Starting Phase 4: Configuration deployment"
-bash ~/soulmateos/install/modules/config.sh
+bash "$MODULES_DIR/config.sh"
 
 # 3. Post-install cleanup
 # Checks for --keep-repo, if not used removes the soulmateos repo stored at $HOME
 echo "→ Cleaning up installation artifacts"
 if [[ "$KEEP_REPO" == false ]]; then
-  rm -rf "$HOME/soulmateos"
-  echo "Removed ~/soulmateos"
+  rm -rf "$REPO_DIR"
+  echo "Removed $REPO_DIR"
 else
-  echo "Retained ~/soulmateos"
+  echo "Retained $REPO_DIR"
 fi
 
 # Checks for --keep-docs, if not used removes the ~/.config/soulmateos/docs folder
 if [[ "$KEEP_DOCS" == false ]]; then
   rm -rf "$CONFIG_DIR/docs"
-  echo "Removed \$CONFIG_DIR/docs"
+  echo "Removed $CONFIG_DIR/docs"
 else
-  echo "Retained \$CONFIG_DIR/docs"
+  echo "Retained $CONFIG_DIR/docs"
 fi
 
 # Checks for --keep-devlogs, if not used removes the ~/.config/soulmateos/devlogs folder
 if [[ "$KEEP_DEVLOGS" == false ]]; then
   rm -rf "$CONFIG_DIR/devlogs"
-  echo "Removed \$CONFIG_DIR/devlogs"
+  echo "Removed $CONFIG_DIR/devlogs"
 else
-  echo "Retained \$CONFIG_DIR/devlogs"
+  echo "Retained $CONFIG_DIR/devlogs"
 fi
 
 # Removes the install directory for simplicity. If the user wants to retain the installation script it can do so via --keep-repo
 rm -rf "$CONFIG_DIR/install"
-echo "Removed \$CONFIG_DIR/install"
+echo "Removed $CONFIG_DIR/install"
 
 # Reboot prompt
-echo -e "\nInstallation complete."
+echo "Installation complete"
 read -rp "Would you like to reboot now? [y/N]: " choice
 case "$choice" in
   y|Y ) echo "Rebooting..."; sudo reboot;;
