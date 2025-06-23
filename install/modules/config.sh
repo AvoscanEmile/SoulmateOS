@@ -42,7 +42,7 @@ fi
 # 5) Symlink map (relative to CONFIG_DIR)
 declare -A LINKS=(
   [qtile]="$HOME/.config/qtile"
-  [org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
+  [services/org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
 )
 
 # 6) Create symlinks
