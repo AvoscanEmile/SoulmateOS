@@ -122,9 +122,9 @@ else
   echo "Retained $CONFIG_DIR/devlogs"
 fi
 
-# Removes the install directory for simplicity. If the user wants to retain the installation script it can do so via --keep-repo
-rm -rf "$CONFIG_DIR/install"
-echo "Removed $CONFIG_DIR/install"
+# Removes unnecessary files and directories for simplicity. If the user wants to retain everything it can do so via --keep-repo
+rm -rf "$CONFIG_DIR/README.md" "$CONFIG_DIR/install" "$CONFIG_DIR/LICENSE" "$CONFIG_DIR/.git"
+echo "Removed non-necesssary files from $CONFIG_DIR"
 
 # Reboot prompt
 echo "Installation complete"
