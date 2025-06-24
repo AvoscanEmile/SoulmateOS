@@ -61,11 +61,13 @@ padding-right = $PADDING_RIGHT
 modules-left = weather
 enable-click = true
 font-0 = "$FONT"
+font-1 = "$FONT_WEATHER"
 
 [module/weather]
 type = custom/script
 exec = curl -s 'wttr.in/?format=%c%t' | sed -E 's/ ([+])?([0-9])/\2/'
 interval = 600
+format = <label>
 label = %output%
 
 [bar/groupsbar]
