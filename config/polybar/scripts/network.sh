@@ -26,8 +26,8 @@ get_speed() {
     
     # Convert bytes per 0.3s interval to kilobytes per second (KB/s)
     # Multiply by ~3.33 (1/0.3) then divide by 1024 to get KB/s
-    rx_speed=$(awk "BEGIN {printf \"%.1f\", ($rx_diff / 0.3) / (1024 * 1024)}")
-    tx_speed=$(awk "BEGIN {printf \"%.1f\", ($tx_diff / 0.3) / (1024 * 1024)}")
+    rx_speed=$(awk "BEGIN {printf \"%.1f\", ($rx_diff / 0.3) / (1024 * 1024 * 8)}")
+    tx_speed=$(awk "BEGIN {printf \"%.1f\", ($tx_diff / 0.3) / (1024 * 1024 * 8)}")
     
     echo "$ethernet_icon $up_icon ${tx_speed}MiB/s \ $down_icon ${rx_speed}MiB/s"
 }
