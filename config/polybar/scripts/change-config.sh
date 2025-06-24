@@ -22,7 +22,7 @@ import_theme() {
   done < "$theme_file"
 }
 
-import_theme ~/.config/qtile/polybar_theme.ini || exit 1
+import_theme ~/.config/soulmateos/themes/polybar_theme.ini || exit 1
 
 cat > ~/.config/polybar/config.ini << EOF
 [bar/datetime]
