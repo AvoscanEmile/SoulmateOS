@@ -27,8 +27,8 @@ fi
 declare -A LINKS=(
   [config/qtile]="$HOME/.config/qtile"
   [config/polybar]="$HOME/.config/polybar"
-  [config/fonts]="$HOME/.local/share/fonts"
   [config/services/org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
+  [themes/fonts]="$HOME/.local/share/fonts"
 )
 
 # 4) Create symlinks
