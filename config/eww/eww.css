@@ -1,0 +1,29 @@
+.horizontal {
+	background-color: #212121;
+	border-radius: 8px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.horizontal contents trough {
+	background-color: #212121;
+	border: 0px;
+}
+
+.horizontal contents trough highlight {
+	background-color: #ffffff;
+	border: 2px solid #ffffff;
+}
+
+.horizontal contents trough slider {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	background-image: url("file:///home/emile/Downloads/knob.svg");
+	background-repeat: no-repeat;
+	background-position: center;         
+	background-size: 8px 8px;   
+	min-width: 8px;
+	min-height: 8px;
+	border-radius: 50%;
+}

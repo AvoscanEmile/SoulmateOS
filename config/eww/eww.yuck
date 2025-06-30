@@ -1,0 +1,49 @@
+;; 2) volume popup
+(deflisten volume :initial "50" "~/.config/eww/volume-monitor.sh")
+
+(defwindow volume
+  :monitor   0
+  :style     "eww.css"
+  :geometry  (geometry
+               :x      "-7px"
+               :y      "51px"
+               :anchor "top right"
+               :width  "210px"
+               :height "40px")
+  :class     "volume-window"
+  :stacking "fg"
+  (volume-slider))
+
+(defwidget volume-slider []
+  (box :class "volume-container"
+    (scale
+      :min         0
+      :max         101
+      :value       volume
+      :orientation "h"
+      :onchange    "wpctl set-volume @DEFAULT_SINK@ {}%; eww update volume={}"
+    )
+  )
+)
+
+      
+      
+(defwidget closer []
+  (eventbox :onclick "eww close-all"))
+
+(defwindow menu-closer
+  :monitor 0
+  :geometry (geometry :width "10%" :height "10%")
+  :stacking "fg"
+  :focusable false
+  :class "volume-closer"
+  (closer))
+
+
+
+
+
+
+
+
+
