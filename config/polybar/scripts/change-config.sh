@@ -105,13 +105,14 @@ padding-left = $PADDING_LEFT
 padding-right = $PADDING_RIGHT
 modules-center = volume
 enable-click = true
+click-left = eww open-many menu-closer volume
 font-0 = "$FONT"
 font-1 = "$FONT_VOLUME"
 
 [module/volume]
 type = custom/script
 exec = bash ~/.config/polybar/scripts/volume.sh
-interval = 1
+interval = 0.1
 label = %output%
 label-margin-left = 5px
 
