@@ -23,7 +23,11 @@ else
   echo "Warning: Qtile autostart not found at $AUTOSTART" >&2
 fi
 
-# 3) Symlink map (relative to CONFIG_DIR)
+# 3) Symlinking (relative to CONFIG_DIR) and theme extraction
+tar -xf "$CONFIG_DIR/themes/gtk/Nordic.tar.xz" -C "$CONFIG_DIR/themes/gtk" && rm "$CONFIG_DIR/themes/gtk/Nordic.tar.xz"
+tar -xf "$CONFIG_DIR/themes/icons/03-Layan-white-cursor.tar.xz" -C "$CONFIG_DIR/themes/icons" && rm "$CONFIG_DIR/themes/icons/03-Layan-white-cursor.tar.xz"
+tar -xf "$CONFIG_DIR/themes/icons/Nordzy.tar.gz" -C "$CONFIG_DIR/themes/icons" && rm "$CONFIG_DIR/themes/icons/Nordzy.tar.gz"
+
 declare -A LINKS=(
   [config/qtile]="$HOME/.config/qtile"
   [config/polybar]="$HOME/.config/polybar"
@@ -32,6 +36,8 @@ declare -A LINKS=(
   [config/picom]="$HOME/.config/picom"
   [config/services/org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
   [themes/fonts]="$HOME/.local/share/fonts"
+  [themes/gtk]="$HOME/.local/share/themes"
+  [themes/icons]="$HOME/.local/share/icons"
 )
 
 # 4) Create symlinks
