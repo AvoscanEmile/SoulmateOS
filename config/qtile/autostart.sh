@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 
+xsetroot -cursor_name Nordzy-cursors-white &
 bash ~/.config/polybar/scripts/change-config.sh
+pkill picom
+nixGL picom &
 pkill polybar
 polybar datetime &
 polybar weather &
@@ -13,5 +16,6 @@ CURRENT_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2*100)}')
 eww update volume="$CURRENT_VOL"
 pkill xfce4-clipman
 xfce4-clipman &
-xset s 1200 1200
+xset s 1200 1200 
 xset dpms 1200 1800 0
+
