@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-xsetroot -cursor_name Nordzy-cursors-white &
+xsetroot -xcf /home/emile/.local/share/icons/Layan-white-cursors/cursors/left_ptr 24
 bash ~/.config/polybar/scripts/change-config.sh
 pkill picom
 nixGL picom &
