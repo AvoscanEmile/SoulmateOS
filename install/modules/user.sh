@@ -13,11 +13,15 @@ nix-env -iA nixpkgs.rofi
 
 # 3. Installing user-level apps
 echo "Installing desktop apps..."
-nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse nixpkgs.polybar
+nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse nixpkgs.polybar nixpkgs.eww
 sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archive-plugin
 
 # 4. Installing UX enhancers
 echo "Installing UX enhancers..."
 sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
+
+# 5. Installing Compositor and dependencies.
+echo "Installing Compositor and dependencies..."
+nix-env -iA nixgl.auto.nixGLDefault nixpkgs.picom
 
 echo "The user environment was succesfully installed"
