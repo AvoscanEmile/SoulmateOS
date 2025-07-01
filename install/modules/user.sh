@@ -22,6 +22,7 @@ sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
 
 # 5. Installing Compositor and dependencies.
 echo "Installing Compositor and dependencies..."
+nix-channel --add https://github.com/nix-community/nixGL/archive/main.tar.gz nixgl && nix-channel --update
 nix-env -iA nixgl.auto.nixGLDefault nixpkgs.picom
 
 echo "The user environment was succesfully installed"
