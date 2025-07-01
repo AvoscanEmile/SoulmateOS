@@ -27,6 +27,9 @@ fi
 declare -A LINKS=(
   [config/qtile]="$HOME/.config/qtile"
   [config/polybar]="$HOME/.config/polybar"
+  [config/eww]="$HOME/.config/eww"
+  [config/gtk-3.0]="$HOME/.config/eww"
+  [config/picom]="$HOME/.config/picom"
   [config/services/org.freedesktop.Notifications.service]="$HOME/.local/share/dbus-1/services/org.freedesktop.Notifications.service"
   [themes/fonts]="$HOME/.local/share/fonts"
 )
