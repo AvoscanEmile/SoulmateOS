@@ -10,7 +10,7 @@ sudo dnf install -y python3.11 python3.11-pip python3.11-devel python3.11-setupt
 echo "Installing C/C++ headers and libraries..."
 sudo dnf install -y \
   libX11-devel libXrandr-devel libXi-devel libXinerama-devel libXcursor-devel libxcb-devel xcb-util-devel xcb-util-renderutil-devel xcb-util-wm-devel \
-  cairo-devel cairo-gobject-devel pango-devel gobject-introspection-devel glib2-devel dbus-devel
+  cairo-devel cairo-gobject-devel pango-devel gobject-introspection-devel glib2-devel dbus-devel xcb-util-cursor
 
 # 3. Install Qtile and Python bindings (as user)
 echo "Installing Python bindings and Qtile..."
