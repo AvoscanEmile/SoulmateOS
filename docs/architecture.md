@@ -379,26 +379,26 @@ This section provides a detailed breakdown of the files within the SoulmateOS pr
 
 These scripts are responsible for setting up the SoulmateOS base system, installing necessary packages, and deploying configurations.
 
-* **`installation.sh`**: This is the main orchestrator script for the entire SoulmateOS setup. It manages the installation phases, including enabling DNF repositories, running module-specific installation scripts, and performing post-installation cleanup. It also handles command-line flags for retaining specific directories (e.g., `--keep-repo`, `--keep-docs`, `--keep-devlogs`) and prompts for a system reboot upon completion.
-    * **Correlates with**: Directly calls `graphics.sh`, `qtile.sh`, `user.sh`, and `config.sh` to execute the different phases of the installation.
+* **`install/installation.sh`**: This is the main orchestrator script for the entire SoulmateOS setup. It manages the installation phases, including enabling DNF repositories, running module-specific installation scripts, and performing post-installation cleanup. It also handles command-line flags for retaining specific directories (e.g., `--keep-repo`, `--keep-docs`, `--keep-devlogs`) and prompts for a system reboot upon completion.
+    * **Correlates with**: Directly calls `install/modules/graphics.sh`, `install/modules/qtile.sh`, `install/modules/user.sh`, and `install/modules/config.sh` to execute the different phases of the installation.
 
-* **`graphics.sh`**: This script handles the installation and configuration of the X11 display server and LightDM, which serves as the display manager and login greeter. It enables LightDM to start at boot and sets the system's default target to a graphical environment.
-    * **Correlates with**: `installation.sh` (called during Phase 1). It also enables LightDM, which is the chosen Display Manager for SoulmateOS.
+* **`install/modules/graphics.sh`**: This script handles the installation and configuration of the X11 display server and LightDM, which serves as the display manager and login greeter. It enables LightDM to start at boot and sets the system's default target to a graphical environment.
+    * **Correlates with**: `install/installation.sh` (called during Phase 1). It also enables LightDM, which is the chosen Display Manager for SoulmateOS.
 
-* **`qtile.sh`**: This script is dedicated to installing Qtile, the chosen tiling window manager, and its dependencies. It installs Python 3.11, development tools, C/C++ headers, and Python bindings, then installs Qtile itself using `pip`. Crucially, it configures a Qtile session for LightDM, allowing users to select Qtile at login.
-    * **Correlates with**: `installation.sh` (called during Phase 2). It sets up Qtile as the window manager and creates the `qtile.desktop` file for LightDM integration.
+* **`install/modules/qtile.sh`**: This script is dedicated to installing Qtile, the chosen tiling window manager, and its dependencies. It installs Python 3.11, development tools, C/C++ headers, and Python bindings, then installs Qtile itself using `pip`. Crucially, it configures a Qtile session for LightDM, allowing users to select Qtile at login.
+    * **Correlates with**: `install/installation.sh` (called during Phase 2). It sets up Qtile as the window manager and creates the `qtile.desktop` file for LightDM integration.
 
-* **`user.sh`**: This script focuses on installing user-level applications and UX enhancements. It installs basic desktop applications (e.g., Kitty, Geany, Thunar, btop) via `sudo dnf install` and user-level apps (e.g., Celluloid, Lollypop, Foliate, Calcurse, Polybar, Eww) and Picom via Nix. It also handles the installation of UX enhancers like `xfce4-notifyd`, `xfce4-screenshooter`, and `xfce4-clipman-plugin`.
-    * **Correlates with**: `installation.sh` (called during Phase 3). It installs many of the applications detailed in the "Apps Selection" and "UX Enhancers" sections of `architecture.md`.
+* **`install/modules/user.sh`**: This script focuses on installing user-level applications and UX enhancements. It installs basic desktop applications (e.g., Kitty, Geany, Thunar, btop) via `sudo dnf install` and user-level apps (e.g., Celluloid, Lollypop, Foliate, Calcurse, Polybar, Eww) and Picom via Nix. It also handles the installation of UX enhancers like `xfce4-notifyd`, `xfce4-screenshooter`, and `xfce4-clipman-plugin`.
+    * **Correlates with**: `install/installation.sh` (called during Phase 3). It installs many of the applications detailed in the "Apps Selection" and "UX Enhancers" sections of `architecture.md`.
 
-* **`config.sh`**: This script is responsible for deploying all configuration files and themes from the SoulmateOS repository to the appropriate user directories (typically `~/.config/soulmateos`). It makes Qtile's autostart script executable, extracts compressed theme files (GTK, icons, cursors), and creates symlinks for various configuration directories (e.g., `qtile`, `polybar`, `gtk-3.0`, `picom`) to their standard locations in `~/.config` or `~/.local/share`.
-    * **Correlates with**: `installation.sh` (called during Phase 4). It manages the deployment of all other configuration files (`picom.conf`, `settings.ini`, `config.ini`, `eww.css`) and links them to their active locations. It ensures `autostart.sh` is executable.
+* **`install/modules/config.sh`**: This script is responsible for deploying all configuration files and themes from the SoulmateOS repository to the appropriate user directories (typically `~/.config/soulmateos`). It makes Qtile's autostart script executable, extracts compressed theme files (GTK, icons, cursors), and creates symlinks for various configuration directories (e.g., `qtile`, `polybar`, `gtk-3.0`, `picom`) to their standard locations in `~/.config` or `~/.local/share`.
+    * **Correlates with**: `install/installation.sh` (called during Phase 4). It manages the deployment of all other configuration files (`config/picom/picom.conf`, `config/gtk-3.0/settings.ini`, `config/polybar/config.ini`, `config/eww/eww.css`, and `config/eww/eww.yuck`) and links them to their active locations. It ensures `config/qtile/autostart.sh` is executable.
 
 ### Runtime Configuration and Startup Scripts
 
 These files define the behavior and appearance of the desktop environment once it's running.
 
-* **`config.py`**: This is the main configuration file for Qtile, written in Python. It defines the core behavior of the window manager.
+* **`config/qtile/config.py`**: This is the main configuration file for Qtile, written in Python. It defines the core behavior of the window manager.
     * It sets keybindings for window navigation, manipulation (moving, growing, shrinking, killing), and layout switching.
     * It defines how windows are grouped (workspaces) and provides keybindings for switching between and moving windows to different groups.
     * It specifies the available window layouts, such as `Columns` and `Max`.
@@ -406,49 +406,45 @@ These files define the behavior and appearance of the desktop environment once i
     * The `@hook.subscribe.setgroup` decorator triggers `polybar-msg hook groups 0` whenever the active group changes, which is used to update the Polybar group indicator via `qtile-groups.sh`.
     * It defines mouse bindings for dragging and resizing floating windows.
     * It includes rules for floating windows, ensuring certain applications (e.g., dialogs, password prompts) appear as floating rather than tiling.
-    * **Correlates with**: `qtile.sh` (which installs Qtile). `autostart.sh` (which it calls at startup). `qtile-groups.sh` (which it notifies of group changes via `polybar-msg`). It dictates how the user interacts with the system, managing windows and leveraging other scripts and configurations.
+    * **Correlates with**: `install/modules/qtile.sh` (which installs Qtile). `config/qtile/autostart.sh` (which it calls at startup). `config/polybar/scripts/qtile-groups.sh` (which it notifies of group changes via `polybar-msg`). It dictates how the user interacts with the system, managing windows and leveraging other scripts and configurations.
 
-* **`autostart.sh`**: This script is executed when Qtile starts a new session. It sets the cursor theme, dynamically updates Polybar's configuration using `change-config.sh`, starts the Picom compositor, launches various Polybar instances (datetime, weather, groupsbar, volumebar, netbar), starts the Eww daemon and updates its volume, and initiates `xfce4-clipman` and X display power management settings.
-    * **Correlates with**: `config.sh` (ensures it's executable). It initiates `picom` using `picom.conf`, starts Polybar instances configured by `config.ini` (which is in turn generated by `change-config.sh`), manages `eww` using `eww.css`, and starts `xfce4-clipman`.
+* **`config/qtile/autostart.sh`**: This script is executed when Qtile starts a new session. It sets the cursor theme, dynamically updates Polybar's configuration using `config/polybar/scripts/change-config.sh`, starts the Picom compositor, launches various Polybar instances (datetime, weather, groupsbar, volumebar, netbar), starts the Eww daemon and updates its volume, and initiates `xfce4-clipman` and X display power management settings.
+    * **Correlates with**: `change-config.sh`. It initiates `picom` using `config/picom/picom.conf`, starts Polybar instances configured by `config/polybar/config.ini` (which is in turn generated by `config/polybar/scripts/change-config.sh`), manages `eww` using `config/eww/eww.css`, and starts `xfce4-clipman`.
 
-* **`picom.conf`**: This is the configuration file for Picom, the X11 compositor. It defines visual effects such as window shadows (radius, offset), fading behavior (fade-in/out steps), transparency for window frames, and rounded corners. It also specifies the backend (`glx`), enables VSync, and includes rules for specific window types (e.g., tooltips, docks).
-    * **Correlates with**: `autostart.sh` (Picom is started with this configuration).
+* **`config/picom/picom.conf`**: This is the configuration file for Picom, the X11 compositor. It defines visual effects such as window shadows (radius, offset), fading behavior (fade-in/out steps), transparency for window frames, and rounded corners. It also specifies the backend (`glx`), enables VSync, and includes rules for specific window types (e.g., tooltips, docks).
+    * **Correlates with**: `config/qtile/autostart.sh` (Picom is started with this configuration).
 
-* **`settings.ini`**: This file contains GTK settings for applications that use the GTK toolkit. It specifies the GTK theme (`Nordic`), icon theme (`nordzy`), and cursor theme (`Layan-white-cursors`). These settings ensure a consistent visual appearance across GTK applications.
-    * **Correlates with**: `config.sh` (the themes specified here are extracted and symlinked during configuration deployment). It influences the "Theming Pipeline" strategy outlined in `architecture.md`.
+* **`config/gtk-3.0/settings.ini`**: This file contains GTK settings for applications that use the GTK toolkit. It specifies the GTK theme (`Nordic`), icon theme (`nordzy`), and cursor theme (`Layan-white-cursors`). These settings ensure a consistent visual appearance across GTK applications.
 
 ### Polybar Configuration and Scripts
 
 These files configure and populate the Polybar panel, which displays system information.
 
-* **`config.ini`**: This file (as initially provided, but later dynamically generated) defines the various Polybar bars and the modules they display. It specifies properties like width, offset, height, background, foreground, radius, padding, and the specific modules to be shown (e.g., `datetime`, `weather`, `groups`, `volume`, `network`).
-    * **Correlates with**: `autostart.sh` (launches the Polybar instances defined here). It's dynamically generated by `change-config.sh`.
+* **`config/polybar/config.ini`**: This file (as initially provided, but later dynamically generated) defines the various Polybar bars and the modules they display. It specifies properties like width, offset, height, background, foreground, radius, padding, and the specific modules to be shown (e.g., `config/polybar/scripts/datetime`, `config/polybar/scripts/weather`, `config/polybar/scripts/groups`, `config/polybar/scripts/volume`, `config/polybar/scripts/network`).
+    * **Correlates with**: `config/qtile/autostart.sh` (launches the Polybar instances defined here). It's dynamically generated by `config/polybar/scripts/change-config.sh`.
 
-* **`polybar_theme.ini`**: This INI file stores a collection of variables used to define the universal and module-specific visual properties of the Polybar instances. This includes background/foreground colors, fonts, radius, height, padding, and precise `offset-x` and `width` values for each bar (datetime, weather, groups, volume, and network).
-    * **Correlates with**: `change-config.sh` (this script reads and exports these variables to dynamically generate the `config.ini` for Polybar). This file is critical for implementing the "Theming Pipeline" strategy mentioned in `architecture.md` by externalizing Polybar's visual configuration.
+* **`themes/polybar_theme.ini`**: This INI file stores a collection of variables used to define the universal and module-specific visual properties of the Polybar instances. This includes background/foreground colors, fonts, radius, height, padding, and precise `offset-x` and `width` values for each bar (datetime, weather, groups, volume, and network).
+    * **Correlates with**: `config/polybar/scripts/change-config.sh` (this script reads and exports these variables to dynamically generate the `config/polybar/config.ini` for Polybar). This file is critical for implementing the "Theming Pipeline" strategy mentioned in `docs/architecture.md` by externalizing Polybar's visual configuration.
 
-* **`change-config.sh`**: This script is crucial for dynamic theming of Polybar. It reads theme variables (like `DATETIME_BAR_WIDTH`, `BACKGROUND`, `FONT`, etc.) from `~/.config/soulmateos/themes/polybar_theme.ini`. Using these variables, it then programmatically generates and overwrites the `~/.config/polybar/config.ini` file, ensuring that Polybar's appearance and module positions adapt to the chosen theme.
-    * **Correlates with**: `autostart.sh` (called at startup to configure Polybar). It generates `config.ini`, making it dependent on `polybar_theme.ini` (not provided in the context, but implied by the script) and `xrandr` for screen resolution.
+* **`config/polybar/scripts/change-config.sh`**: This script is crucial for dynamic theming of Polybar. It reads theme variables (like `DATETIME_BAR_WIDTH`, `BACKGROUND`, `FONT`, etc.) from `~/.config/soulmateos/themes/polybar_theme.ini`. Using these variables, it then programmatically generates and overwrites the `~/.config/polybar/config.ini` file, ensuring that Polybar's appearance and module positions adapt to the chosen theme.
+    * **Correlates with**: `config/qtile/autostart.sh` (called at startup to configure Polybar). It generates `config/polybar/config.ini`, making it dependent on `themes/polybar_theme.ini`.
 
-* **`qtile-groups.sh`**: This script is designed to be used as a custom module in Polybar to display the status of Qtile's workspaces (groups). It queries Qtile to identify the currently active group and then outputs a visual representation (e.g., '●' for active, '○' for inactive) for groups 1 through 9.
-    * **Correlates with**: `config.ini` (used as the `exec` command for the `module/groups`).
+* **`config/polybar/scripts/qtile-groups.sh`**: This script is designed to be used as a custom module in Polybar to display the status of Qtile's workspaces (groups). It queries Qtile to identify the currently active group and then outputs a visual representation (e.g., '●' for active, '○' for inactive) for groups 1 through 9.
+    * **Correlates with**: `config/polybar/scripts/change-config.sh` (used as the `exec` command for the `module/groups`). It's implemented as a hook with `config/qtile/config.py`.
 
-* **`volume.sh`**: This script provides a dynamic volume indicator for Polybar. It uses `wpctl` to retrieve the current volume percentage and mute status from the default audio sink. Based on these values, it selects an appropriate Unicode icon (muted, low, mid, or high volume) and outputs the icon followed by the volume percentage.
-    * **Correlates with**: `config.ini` (used as the `exec` command for the `module/volume`).
+* **`config/polybar/scripts/volume.sh`**: This script provides a dynamic volume indicator for Polybar. It uses `wpctl` to retrieve the current volume percentage and mute status from the default audio sink. Based on these values, it selects an appropriate Unicode icon (muted, low, mid, or high volume) and outputs the icon followed by the volume percentage.
+    * **Correlates with**: `config/polybar/scripts/change-config.sh` (used as the `exec` command for the `module/volume`).
 
-* **`volume-monitor.sh`**: This script is similar to `volume.sh` in its purpose but specifically designed for continuous monitoring rather than a single output. It immediately outputs the current volume using `wpctl` and then includes a placeholder for further monitoring logic. While `volume.sh` is used in Polybar for its direct output, `volume-monitor.sh` suggests a more persistent background process.
-    * **Correlates with**: Potentially a custom Qtile widget for continuous volume display or a different monitoring tool, as mentioned in the `architecture.md` regarding the planned custom Qtile volume widget.
-
-* **`network.sh`**: This script monitors network activity (upload and download speeds) for a specified network interface (e.g., `enp2s0`) and outputs the information for display in Polybar. It calculates speeds by comparing byte counts over a short interval and includes Unicode icons for Ethernet, upload, and download.
-    * **Correlates with**: `config.ini` (used as the `exec` command for the `module/network`).
+* **`config/polybar/scripts/network.sh`**: This script monitors network activity (upload and download speeds) for a specified network interface (e.g., `enp2s0`) and outputs the information for display in Polybar. It calculates speeds by comparing byte counts over a short interval and includes Unicode icons for Ethernet, upload, and download.
+    * **Correlates with**: `config/polybar/scripts/change-config.sh` (used as the `exec` command for the `module/network`).
 
 ### Eww Configuration
 
-* **`eww.yuck`**: This file contains the Eww configuration, defining a `volume` window and a `volume-slider` widget. The `volume` window is positioned at the top right of the monitor, with a specific width and height. The `volume-slider` widget uses a horizontal scale to display and control the system volume, which is updated via `wpctl set-volume` when the slider is changed]. It also defines a `menu-closer` window with a `closer` widget that closes all Eww windows when clicked.
-    * **Correlates with**: `autostart.sh` (Eww is daemonized, and the `volume` variable is updated at startup). `volume-monitor.sh` (this script is the `deflisten` source for the `volume` variable in `eww.txt`). `eww.css` (this file provides the styling for the Eww windows and widgets defined here).
+* **`config/eww/eww.yuck`**: This file contains the Eww configuration, defining a `volume` window and a `volume-slider` widget. The `volume` window is positioned at the top right of the monitor, with a specific width and height. The `volume-slider` widget uses a horizontal scale to display and control the system volume, which is updated via `wpctl set-volume` when the slider is changed]. It also defines a `menu-closer` window with a `closer` widget that closes all Eww windows when clicked.
+    * **Correlates with**: `config/qtile/autostart.sh` (Eww is daemonized, and the `volume` variable is updated at startup). `config/eww/scripts/volume-monitor.sh` (this script is the `deflisten` source for the `volume` variable in `eww.txt`). `config/eww/eww.css` (this file provides the styling for the Eww windows and widgets defined here).
 
-* **`eww.css`**: This CSS file is for styling Eww (Extensible Wayland Widgets). It defines the visual properties of horizontal elements, including background color, border-radius, padding, and specific styling for the progress bar's trough and slider (including a custom knob image).
-    * **Correlates with**: `autostart.sh` (Eww is daemonized and updated with volume, implying this CSS is loaded by Eww) and `eww.yuck` as it directly provides styling for the widgets defined there.
+* **`config/eww/eww.css`**: This CSS file is for styling Eww (Extensible Wayland Widgets). It defines the visual properties of horizontal elements, including background color, border-radius, padding, and specific styling for the progress bar's trough and slider (including a custom knob image).
+    * **Correlates with**: `config/qtile/autostart.sh` (Eww is daemonized and updated with volume, making this CSS is loaded by Eww) and `config/eww/eww.yuck` as it directly provides styling for the widgets defined there.
 
-* **`volume-monitor.sh`**: This bash script is used as a `deflisten` source for Eww. Its primary function is to continuously output the current system volume as an integer (0-101) by querying `wpctl get-volume @DEFAULT_AUDIO_SINK@`. It also explicitly flushes its output.
-    * **Correlates with**: `eww.yuck` (provides the volume data to the Eww `volume` variable). `volume.sh` (both scripts interact with `wpctl` for volume information, though `volume-monitor.sh` is specifically designed for continuous Eww listening).
+* **`config/eww/scripts/volume-monitor.sh`**: This bash script is used as a `deflisten` source for Eww. Its primary function is to continuously output the current system volume as an integer (0-101) by querying `wpctl get-volume @DEFAULT_AUDIO_SINK@`. It also explicitly flushes its output.
+    * **Correlates with**: `config/eww/eww.yuck` (provides the volume data to the Eww `volume` variable). `config/polybar/scripts/volume.sh` (both scripts interact with `wpctl` for volume information, though `volume-monitor.sh` is specifically designed for continuous Eww listening).
