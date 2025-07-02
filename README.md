@@ -58,13 +58,13 @@ The SoulmateOS repository is organized to facilitate clarity, modularity, and ea
 
   * **`config/`**: Houses all the configuration files for Qtile, Picom, GTK, Polybar, and Eww. These are the dotfiles that define the system's behavior and appearance.
 
-  * **`themes/`**: Stores theme-related variables and assets, particularly for Polybar, ensuring a centralized approach to visual consistency.
+  * **`themes/`**: Stores theme-related variables and assets, ensuring a centralized approach to visual consistency.
 
   * **`docs/`**: This directory contains comprehensive documentation for the project, including:
 
       * **`architecture.md`**: A detailed outline of the project's design philosophy, component selection rationale, security goals, and file intercorrelations.
       * **`roadmap.md`**: A structured, modular plan outlining the project's development phases, from initial setup to future meta-distro capabilities and "rice" management.
-      * **`README.md` (this file)**: Provides a high-level overview of the entire project.
+      * **`changelog.md` **: Provides an outline of the versions of the project, alongside what did each version added, removed, and changed. 
 
   * **`devlogs/`**: Contains development logs documenting the project's progress and decisions throughout the development process.
 
@@ -72,7 +72,7 @@ The SoulmateOS repository is organized to facilitate clarity, modularity, and ea
 
 SoulmateOS follows a structured roadmap, evolving from a robust AlmaLinux-based environment towards a cross-distribution meta-distro platform with advanced "rice" (configuration) management capabilities. Key phases include:
 
-  * **Current State (v1.0.0)**: A stable, AlmaLinux-based environment with a polished Qtile desktop, curated applications, and initial security hardening.
+  * **Current Goal (v1.0.0)**: A stable, AlmaLinux-based environment with a polished Qtile desktop, curated applications, and initial security hardening.
 
   * **Meta-Distro Development (v1.1.0 - v1.3.0)**: Research and implementation of cross-distribution compatibility, enabling SoulmateOS to be installed and run on other major Linux distributions (e.g., Debian/Ubuntu, Fedora, Arch).
 
