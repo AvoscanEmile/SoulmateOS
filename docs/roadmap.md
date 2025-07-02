@@ -210,6 +210,6 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 | 11    | Meta-Distro: Theme & UX Layer Porting        | `1.3.0`       |
 | 12    | "Rice" Management: `install-rice` Development & Alpha | `1.4.0`       |
 | 13    | "Rice" Management: `create-rice` Development & Standardization | `1.5.0`       |
-| 14    | Meta-Distro & Rice System: Robustness & Usability Refinement | `1.7.0`       |
-| 15    | Community & Documentation: Ecosystem Foundation | `1.9.0`       |
+| 14    | Meta-Distro & Rice System: Robustness & Usability Refinement | `1.6.0`       |
+| 15    | Community & Documentation: Ecosystem Foundation | `1.7.0`       |
 | 16    | SoulmateOS 2.0.0 Final Release               | `2.0.0`       |
