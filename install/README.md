@@ -2,8 +2,6 @@
 
 This guide provides a comprehensive overview and instructions for transforming a minimal AlmaLinux 9.6 installation into a complete graphical environment powered by LightDM and the Qtile Window Manager, along with various user-level applications and configurations.
 
------
-
 ## Requirements
 
 Before you begin, ensure your system meets the following requirements:
@@ -11,8 +9,6 @@ Before you begin, ensure your system meets the following requirements:
   * **AlmaLinux 9.6 Minimal Installation**: This installer is specifically designed for a minimal installation of AlmaLinux 9.6.
   * **Internet Connection**: An active internet connection is required to download packages and dependencies.
   * **Root or `sudo` Privileges**: The installation process requires administrative privileges to install system-level packages and configure services.
-
------
 
 ## Quick Installation
 
@@ -23,8 +19,6 @@ sudo dnf install -y git
 git clone https://github.com/avoscanemile/soulmateos.git
 bash soulmateos/install/installation.sh
 ```
-
------
 
 ## Detailed Installation Process
 
@@ -67,8 +61,6 @@ After all installation phases are complete, the `installation.sh` script perform
 ### Reboot
 
 Upon successful completion, the installer will prompt you to reboot your system. It is highly recommended to reboot to apply all changes and start your new soulmateOS environment.
-
------
 
 ## Usage of `installation.sh` Flags
 
