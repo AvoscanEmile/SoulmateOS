@@ -25,7 +25,7 @@ fi
 
 # 3) Symlinking (relative to CONFIG_DIR) and theme extraction
 tar -xf "$CONFIG_DIR/themes/gtk/Nordic.tar.xz" -C "$CONFIG_DIR/themes/gtk" && rm "$CONFIG_DIR/themes/gtk/Nordic.tar.xz"
-tar -xf "$CONFIG_DIR/themes/icons/03-Layan-white-cursor.tar.xz" -C "$CONFIG_DIR/themes/icons" && rm "$CONFIG_DIR/themes/icons/03-Layan-white-cursor.tar.xz"
+tar -xf "$CONFIG_DIR/themes/icons/03-Layan-white-cursors.tar.xz" -C "$CONFIG_DIR/themes/icons" && rm "$CONFIG_DIR/themes/icons/03-Layan-white-cursors.tar.xz"
 tar -xf "$CONFIG_DIR/themes/icons/Nordzy.tar.gz" -C "$CONFIG_DIR/themes/icons" && rm "$CONFIG_DIR/themes/icons/Nordzy.tar.gz"
 
 declare -A LINKS=(
