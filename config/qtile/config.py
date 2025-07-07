@@ -42,6 +42,16 @@ terminal = guess_terminal()
 @hook.subscribe.setgroup
 def notify_polybar_group_change():
     subprocess.call(["polybar-msg", "hook", "groups", "0"])
+    
+def toggle_fullscreen_and_polybar(qtile):
+    window = qtile.current_window
+    polybar_command = "polybar datetime & polybar weather & polybar groupsbar & polybar volumebar & polybar netbar &"
+    if window.fullscreen:
+        window.toggle_fullscreen()
+        qtile.spawn(f"sh -c '{polybar_command}'")
+    else:
+        qtile.spawn("pkill polybar")
+        window.toggle_fullscreen()
 
 keys = [
     # Switch between windows
@@ -80,7 +90,7 @@ keys = [
     Key(
         [mod],
         "f",
-        lazy.window.toggle_fullscreen(),
+        lazy.function(toggle_fullscreen_and_polybar),
         desc="Toggle fullscreen on the focused window",
     ),
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
@@ -130,7 +140,14 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.MonadTall(
+        margin=7,
+        border_width=0,
+        # The ratio of the main pane vs. the stack (50%)
+        ratio=0.5,
+        # How much to change the ratio when resizing
+        change_ratio=0.05
+    ),
     layout.Max(),
 ]
 
@@ -142,7 +159,9 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 screens = [
-    Screen()
+    Screen(
+		top=bar.Gap(45)
+    )
 ]
 
 # Drag floating layouts.
@@ -154,8 +173,8 @@ mouse = [
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
-follow_mouse_focus = True
-bring_front_click = False
+follow_mouse_focus = False
+bring_front_click = True
 floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
