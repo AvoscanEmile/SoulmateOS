@@ -37,6 +37,7 @@ padding-left = $PADDING_LEFT
 padding-right = $PADDING_RIGHT
 modules-left = datetime
 enable-click = true
+override-redirect = true
 font-0 = "$FONT"
 
 [module/datetime]
@@ -90,7 +91,7 @@ exec = bash ~/.config/polybar/scripts/qtile-groups.sh
 interval = 0
 hook-0 = ~/.config/polybar/scripts/qtile-groups.sh
 label = %output%
-label-margin-left = 1
+label-margin-left = 2
 
 [bar/volumebar]
 override-redirect = true
