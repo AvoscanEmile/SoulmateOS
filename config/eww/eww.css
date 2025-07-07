@@ -1,5 +1,5 @@
 .horizontal {
-	background-color: #212121;
+	background-color: #2e3440;
 	border-radius: 8px;
 	padding-left: 25px;
 	padding-right: 25px;
@@ -11,8 +11,8 @@
 }
 
 .horizontal contents trough highlight {
-	background-color: #ffffff;
-	border: 2px solid #ffffff;
+	background-color: #e5e9f0;
+	border: 2px solid #e5e9f0;
 }
 
 .horizontal contents trough slider {

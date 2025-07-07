@@ -6,7 +6,7 @@
   :style     "eww.css"
   :geometry  (geometry
                :x      "-7px"
-               :y      "51px"
+               :y      "52px"
                :anchor "top right"
                :width  "210px"
                :height "40px")
@@ -33,7 +33,7 @@
 
 (defwindow menu-closer
   :monitor 0
-  :geometry (geometry :width "10%" :height "10%")
+  :geometry (geometry :width "100%" :height "100%")
   :stacking "fg"
   :focusable false
   :class "volume-closer"
