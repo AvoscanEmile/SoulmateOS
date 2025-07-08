@@ -31,6 +31,7 @@ tar -xf "$CONFIG_DIR/themes/icons/Nordzy.tar.gz" -C "$CONFIG_DIR/themes/icons" &
 declare -A LINKS=(
   [config/qtile]="$HOME/.config/qtile"
   [config/polybar]="$HOME/.config/polybar"
+  [config/rofi]="$HOME/.config/rofi"
   [config/eww]="$HOME/.config/eww"
   [config/gtk-3.0]="$HOME/.config/gtk-3.0"
   [config/picom]="$HOME/.config/picom"
