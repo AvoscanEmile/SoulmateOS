@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 xsetroot -xcf /home/emile/.local/share/icons/Layan-white-cursors/cursors/left_ptr 24
+bash ~/.config/soulmateos/config/scripts/change-themes.sh
 bash ~/.config/polybar/scripts/change-config.sh
 pkill picom
 nixGL picom &
