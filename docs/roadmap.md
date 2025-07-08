@@ -99,7 +99,7 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * Dotfile deployment
 * Scripted security and config setup
 * Test in VM for reproducibility
-* **Version Tag:** `0.9.0`
+* **Version Tag:** `0.8.0`
 
 ## Phase 8 — Finalization and 1.0 Release
 
@@ -111,105 +111,116 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * Optional: Build ISO
 * **Version Tag:** `1.0.0`
 
-## Phase 9 — Meta-Distro Foundation: Cross-Distribution Research & Core Adaptation (Towards 2.0.0)
+## Phase 9 — Core OS Foundation & Cross-Distro Base Integration
 
-**Goal:** Lay the groundwork for cross-distribution compatibility by thoroughly researching target distributions and adapting core components.
+**Goal:** Establish the minimal, essential host distribution layer on multiple target distributions, ensuring a functional graphical base system for Nix to build upon. This phase defines the boundaries between the host distribution's responsibilities and Nix's capabilities.
 
-* **9.1 Distribution Landscape Analysis:** Identify 2-3 target major distributions (e.g., Debian/Ubuntu, Fedora, Arch) for initial compatibility. Research their package managers (`apt`, `dnf`, `pacman`), init systems (`systemd` specifics), and common filesystem layout variations.
-* **9.2 Core Component Dependency Mapping:** For Qtile, Polybar, Eww, Picom, and Kitty, map their essential runtime dependencies across the selected target distributions. Identify commonalities and divergences in package names.
-* **9.3 Installation Script Modularity Refinement:** Refactor the existing `installation.sh` script to introduce modular functions or sections for distro-specific package installation and service management. Begin implementing initial distro detection logic.
-* **9.4 Base Configuration Abstraction:** Review existing dotfiles and configurations (e.g., Qtile `config.py`, Polybar configs) to identify AlmaLinux-specific paths or commands that need to be abstracted or made conditional for other distributions.
+* **9.1 Distribution Landscape Analysis & Selection:** Identify 2-3 target major distributions (e.g., AlmaLinux, Debian/Ubuntu, Fedora, Arch) for initial compatibility. Research their package managers (`apt`, `dnf`, `pacman`), init systems (`systemd` specifics), and common filesystem layout variations.
+* **9.2 Minimal Core OS Installation Scripting:** Develop a base installation script (`installation.sh`) that performs a standard minimal installation of the chosen host distribution.
+* **9.3 Essential System-Level Components Installation:** Implement conditional logic within `installation.sh` to install the few *additional* essential system-level components for a graphical base, managed by the host distro's package manager:
+    * `dbus`, `polkit`
+    * X.Org Server, Mesa, & Core X11 Libraries (`base-x` or equivalents)
+    * Wayland Protocol Libraries & Xwayland
+    * Display Manager (`sddm` recommended, or `gdm`/`lightdm`)
+    * Networking components (`NetworkManager`, etc.)
+    * Filesystem support (`udisks2`, `gvfs`, etc.)
+    * Essential shared libraries (`libstdc++`, `zlib`, etc.)
+    * Basic console tools and system security frameworks (`firewalld`/`ufw`, SELinux/AppArmor)
+* **9.4 Configure Default Graphical Target:** Ensure `sudo systemctl set-default graphical.target` is executed to boot into the graphical environment.
 * **Version Tag:** `1.1.0`
 
-## Phase 10 — Meta-Distro Development: Core Component Cross-Compatibility
+## Phase 10 — Nix Integration & Initial User Environment Deployment
 
-**Goal:** Achieve functional core SoulmateOS component installations on at least two new target distributions beyond AlmaLinux.
+**Goal:** Integrate Nix as the declarative manager for the user environment, building upon the established host OS foundation.
 
-* **10.1 Package Installation Implementation:** Implement the conditional logic within `installation.sh` to correctly install core SoulmateOS dependencies using the native package manager of the detected distribution.
-* **10.2 Service & Autostart Adaptation:** Ensure Qtile, Picom, and other necessary background services/autostart entries function correctly across target distributions (e.g., `systemctl` usage, `xinitrc`/`xsession` differences).
-* **10.3 Basic Environment Validation:** Perform initial installation tests on virtual machines for each new target distribution. Verify Qtile starts, a terminal (Kitty) opens, and the display manager (if applicable) loads correctly.
-* **10.4 Common Configuration Adjustments:** Address any immediate functional breaks related to configuration paths or commands that differ between AlmaLinux and the new target distributions.
+* **10.1 Nix Package Manager Installation:** Implement the installation of the Nix package manager on the host system.
+* **10.2 SoulmateOS Home Manager Configuration Repository Cloning:** Script the cloning of the `home.nix` configuration repository (the future default "rice" profile).
+* **10.3 Initial Home Manager Activation:** Implement the initial activation of Home Manager using the cloned configuration, declaratively deploying the default user desktop environment (e.g., Wayland compositor, X11 WM, default terminal).
+* **10.4 Basic Environment Validation:** Verify that the display manager loads, the chosen window manager/compositor starts, and a terminal (e.g., Kitty, if Nix-managed) can be opened.
 * **Version Tag:** `1.2.0`
 
-## Phase 11 — Meta-Distro Expansion: Theme & UX Layer Porting
+## Phase 11 — `soul` CLI Development: Imperative Control Foundation
 
-**Goal:** Extend cross-distribution compatibility to the theming, visual cohesion, and UX enhancer layers, ensuring a consistent user experience regardless of the underlying distro.
+**Goal:** Develop the core `soul` command-line interface for imperative package management and the "dirty state" detection mechanism.
 
-* **11.1 GTK & Icon Theme Cross-Compatibility:** Verify the GTK theme (Nordic), icon theme (Nordzy), and cursor theme (Layan-white-cursors) are correctly applied across new distributions. Address any pathing or GTK version-specific issues (GTK3 vs. GTK4).
-* **11.2 Polybar & Eww Adaptation:** Ensure Polybar and Eww widgets function correctly across distributions, accounting for potential differences in `sysfs` paths, network interface naming, or specific command-line utilities.
-* **11.3 UX Enhancer Integration:** Integrate `xfce4-clipman`, `xfce4-notifyd`, and `xfce4-screenshooter` to function reliably on new distributions, addressing any missing dependencies or service startup issues.
-* **11.4 Font Management Across Distros:** Verify font installation and rendering consistency, accounting for different font caching mechanisms or system font directories.
+* **11.1 `soul install <package-name>` Implementation:** Develop the initial `soul install` command to perform immediate user-level imperative installations using `nix-env -iA nixpkgs.<package-name>` (or `nix profile install nixpkgs#<package-name>`).
+* **11.2 `soul remove <package-name>` Implementation:** Develop the initial `soul remove` command to perform immediate user-level imperative removals using `nix-env -e <package-name>`.
+* **11.3 Mutable Package Cache (`installed_packages.json`):** Implement the creation and management of a SoulmateOS-managed mutable cache file (e.g., `~/.local/share/soulmateos/installed_packages.json`) to track imperatively installed/removed packages.
+* **11.4 "Dirty State" Detection (Initial):** Implement a mechanism to detect unsaved manual changes in monitored user configuration directories before any `home-manager switch` operation.
+* **11.5 User Prompting for Unsaved Changes:** Integrate basic user prompts (save, discard, cancel) when unsaved changes are detected.
 * **Version Tag:** `1.3.0`
 
-## Phase 12 — "Rice" Management System: `install-rice` Development & Alpha
+## Phase 12 — `soul save` & Declarative State Conservation
 
-**Goal:** Develop a functional alpha version of the `install-rice` command, enabling basic "rice" installation from GitHub.
+**Goal:** Implement the pivotal `soul save` command to translate imperative user modifications into a declarative Nix configuration.
 
-* **12.1 `install-rice` Script Core:** Develop the initial `install-rice` bash script to clone a specified GitHub repository.
-* **12.2 Basic Dotfile Symlinking/Copying:** Implement logic to identify common dotfile directories within the "rice" repository and create symlinks or copy them to the user's `~/.config/` or `~/.local/share/` directories.
-* **12.3 `install-rice` Basic Validation:** Test the `install-rice` command with a few simple, pre-defined "rice" repositories.
-* **12.4 Error Handling & User Feedback (Basic):** Implement basic error checking (e.g., repo not found, insufficient permissions) and provide clear command-line feedback to the user.
+* **12.1 Monitored Directories Definition:** Define the set of user-owned directories (e.g., `~/.config/`, `~/.local/share/`) that `soul save` will monitor for changes.
+* **12.2 Configuration File Change Capture:** Develop the logic to compare current file content against a baseline and capture modified or newly created text-based configuration files.
+* **12.3 Dynamic `home.nix` Generation (File References):** Implement dynamic generation of a new Nix module (e.g., `auto-generated-config.nix`) that uses `home.file."<path>".source = ./path/to/file;` to declaratively manage captured configuration files. Ensure the actual files are copied into a SoulmateOS-managed local repository structure.
+* **12.4 Package List Synchronization:** Implement the logic within `soul save` to read `installed_packages.json` and update the `home.packages` list in the main `home.nix` configuration.
+* **12.5 Declarative Deployment Trigger:** Trigger `home-manager switch` after updating the declarative configuration to apply changes and create a new generation.
 * **Version Tag:** `1.4.0`
 
-## Phase 13 — "Rice" Management System: `create-rice` Development & Standardization
+## Phase 13 — "Rice" Management: `soul save-de` & `soul switch-de`
 
-**Goal:** Develop the `create-rice` command, streamlining the packaging of user dotfiles into a standardized "rice" repository format, and define the "rice" repository structure.
+**Goal:** Implement the "rice" (Desktop Environment profile) management system, allowing users to save and switch between distinct DEs.
 
-* **13.1 `create-rice` Script Core:** Develop the initial `create-rice` bash script to identify and collect common SoulmateOS dotfiles and configuration directories from the user's system.
-* **13.2 Standardized Rice Repository Structure:** Define a clear and consistent directory structure for SoulmateOS "rice" repositories (e.g., `qtile/`, `polybar/`, `eww/`, `gtk/`, `icons/`, `themes/`, `fonts/`).
-* **13.3 Metadata & Licensing Integration:** Implement functionality within `create-rice` to prompt for and include essential metadata (author, description, license) in the generated repository.
-* **13.4 Automated Packaging & Git Init:** Automate the packaging of collected dotfiles into the standardized structure and initialize a new Git repository ready for user upload.
+* **13.1 `soul save-de <de-name>` Implementation:** Develop the command to create a persistent Nix GC root pointing to the current active Home Manager generation, preventing it from being garbage collected.
+* **13.2 `soul switch-de <de-name>` Implementation:** Develop the command to switch to a saved DE generation using `home-manager switch --switch-to <path-to-de-generation>`.
+* **13.3 Graphical Session Restart/Prompt:** Integrate a mechanism to prompt for or attempt a graphical session restart after switching DEs.
+* **13.4 Default "Rice" Profiles:** Prepare 5-6 default "rice" profiles (Nix configurations) to be shipped with SoulmateOS, leveraging the 1.0.0 environment as the base for one of these.
 * **Version Tag:** `1.5.0`
 
-## Phase 14 — Meta-Distro & Rice System: Robustness & Usability Refinement
+## Phase 14 — Robustness, Usability & Documentation Refinement
 
-**Goal:** Enhance the robustness, error handling, and user-friendliness of both the cross-distribution installer and the "rice" management system.
+**Goal:** Enhance the reliability, user-friendliness, and documentation of the entire SoulmateOS system.
 
-* **14.1 Comprehensive Error Handling:** Implement robust error handling and informative messages throughout the `installation.sh`, `install-rice`, and `create-rice` scripts.
-* **14.2 Idempotency & Rollback Mechanisms:** Ensure all scripts are idempotent (can be run multiple times without adverse effects) and consider basic rollback mechanisms for installations/rice applications.
-* **14.3 User Interaction & Prompts:** Improve user prompts and interactive choices within the installer and rice commands (e.g., "Do you want to install X?", "Select rice variant").
-* **14.4 Performance Optimization:** Optimize script execution speed and resource usage where possible.
-* **14.5 Automated Testing Framework:** Begin developing automated tests for the installer and rice commands to ensure consistency and prevent regressions across different distributions.
+* **14.1 Comprehensive Error Handling:** Implement robust error handling and informative messages across all `soul` commands and installation scripts.
+* **14.2 Idempotency & Basic Rollback:** Ensure all scripts are idempotent and consider basic rollback mechanisms for installations/rice applications.
+* **14.3 Improved User Interaction:** Refine user prompts and interactive choices within all `soul` commands (e.g., clearer "dirty state" options).
+* **14.4 Initial Troubleshooting Guides:** Develop clear documentation for common troubleshooting scenarios, especially related to SELinux.
+* **14.5 User Guidelines Enforcement:** Document clear guidelines for users regarding actions outside `soul` commands and their implications, emphasizing that following guidelines ensures support.
 * **Version Tag:** `1.6.0`
 
-## Phase 15 — Community & Documentation: Ecosystem Foundation
+## Phase 15 — Community, Advanced Features & Performance
 
-**Goal:** Foster a community-driven ecosystem around SoulmateOS "rices" and comprehensively document the new meta-distro capabilities.
+**Goal:** Foster a community-driven ecosystem, explore performance optimizations, and lay groundwork for advanced "rice" features.
 
-* **15.1 "Rice" Showcase & Discovery:** Plan and potentially implement a mechanism for users to discover and browse available SoulmateOS "rices" (e.g., a dedicated GitHub topic, a simple web page).
-* **15.2 Contributing Guidelines:** Create detailed guidelines for "rice" creators, including best practices, licensing considerations, and submission processes.
-* **15.3 Meta-Distro Documentation:** Update the `architecture.md` and other documentation to fully reflect the meta-distro vision, including supported distributions, installation nuances, and troubleshooting tips.
-* **15.4 Version Control & Release Process for 2.0.0:** Finalize the versioning strategy and release process for the 2.0.0 major release, including beta testing periods.
+* **15.1 "Rice" Showcase & Discovery (Conceptual):** Plan a mechanism for users to discover and browse available SoulmateOS "rices" (e.g., a dedicated GitHub topic, simple web page).
+* **15.2 Contributing Guidelines for "Rice" Creators:** Create detailed guidelines for "rice" creators, including best practices, licensing, and packaging standards for `soul save` compatibility.
+* **15.3 Performance Optimization Review:** Review and optimize script execution speed and resource usage, particularly for `soul save` with larger configurations.
+* **15.4 Meta-Distro Documentation Expansion:** Update `architecture.md` and other documentation to fully reflect the meta-distro vision, supported distributions, installation nuances, and troubleshooting.
+* **15.5 Optional: "Rice" Versioning & Dependencies (Research):** Begin research into potential versioning for "rices" and handling inter-rice dependencies.
 * **Version Tag:** `1.7.0`
 
-### Phase 16 — SoulmateOS 2.0.0 Final Release
+## Phase 16 — SoulmateOS 2.0.0 Final Release
 
-**Goal:** Conduct final testing, comprehensive documentation, and officially release SoulmateOS 2.0.0 as a cross-distribution meta-distro platform with robust "rice" management.
+**Goal:** Conduct final testing, comprehensive documentation, and officially release SoulmateOS 2.0.0 as a cross-distribution meta-distro platform with robust "imperative editing, declarative conservation" management.
 
-* **16.1 Final QA & Stress Testing:** Extensive testing across all supported distributions, focusing on stability, performance, and the seamless integration of all components.
-* **16.2 Comprehensive Documentation Review:** A thorough review and polish of all project documentation, ensuring accuracy, clarity, and completeness for new and existing users.
+* **16.1 Final QA & Stress Testing:** Extensive testing across all supported distributions, focusing on stability, performance, and seamless integration of all components and `soul` commands.
+* **16.2 Comprehensive Documentation Polish:** A thorough review and polish of all project documentation, ensuring accuracy, clarity, and completeness for new and existing users.
 * **16.3 Community Launch & Announcement:** Prepare release announcements and engage with the community to introduce the new capabilities of SoulmateOS 2.0.0.
 * **16.4 Tag Release:** Officially tag the `2.0.0` version in the Git repository.
 * **Version Tag:** `2.0.0`
 
 ## Summary Table
 
-| Phase | Focus Area                                   | Tag           |
-| ----- | -------------------------------------------- | ------------- |
-| 0     | Bootstrap + Git + Docs                       | `0.1.0`       |
-| 1     | Qtile Base Setup                             | `0.2.0`       |
-| 2     | System Utilities Layer                       | `0.3.0`       |
-| 3     | User Applications Layer                      | `0.4.0`       |
-| 4     | UX Enhancers & Session Polish                | `0.5.0`       |
-| 5     | Theming & Visual Integration                 | `0.6.0`       |
-| 6     | Security Hardening                           | `0.7.0`       |
-| 7     | Installation Automation                      | `0.8.0`       |
-| 8     | QA + Docs + Final Release                    | `1.0.0`       |
-| 9     | Meta-Distro: Cross-Distro Research & Core Adaptation | `1.1.0`       |
-| 10    | Meta-Distro: Core Component Cross-Compatibility | `1.2.0`       |
-| 11    | Meta-Distro: Theme & UX Layer Porting        | `1.3.0`       |
-| 12    | "Rice" Management: `install-rice` Development & Alpha | `1.4.0`       |
-| 13    | "Rice" Management: `create-rice` Development & Standardization | `1.5.0`       |
-| 14    | Meta-Distro & Rice System: Robustness & Usability Refinement | `1.6.0`       |
-| 15    | Community & Documentation: Ecosystem Foundation | `1.7.0`       |
-| 16    | SoulmateOS 2.0.0 Final Release               | `2.0.0`       |
+| Phase | Focus Area | Tag |
+|---|---|---|
+| 0 | Bootstrap + Git + Docs | `0.1.0` |
+| 1 | Qtile Base Setup | `0.2.0` |
+| 2 | System Utilities Layer | `0.3.0` |
+| 3 | User Applications Layer | `0.4.0` |
+| 4 | UX Enhancers & Session Polish | `0.5.0` |
+| 5 | Theming & Visual Integration | `0.6.0` |
+| 6 | Security Hardening | `0.7.0` |
+| 7 | Automation, Optimization and Reproducibility | `0.8.0` |
+| 8 | QA + Docs + Final Release | `1.0.0` |
+| 9 | Core OS Foundation & Cross-Distro Base Integration | `1.1.0` |
+| 10 | Nix Integration & Initial User Environment Deployment | `1.2.0` |
+| 11 | `soul` CLI Development: Imperative Control Foundation | `1.3.0` |
+| 12 | `soul save` & Declarative State Conservation | `1.4.0` |
+| 13 | "Rice" Management: `soul save-de` & `soul switch-de` | `1.5.0` |
+| 14 | Robustness, Usability & Documentation Refinement | `1.6.0` |
+| 15 | Community, Advanced Features & Performance | `1.7.0` |
+| 16 | SoulmateOS 2.0.0 Final Release | `2.0.0` |
