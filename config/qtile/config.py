@@ -31,6 +31,9 @@ from libqtile.utils import guess_terminal
 import os
 import subprocess
 
+home_dir = os.path.expanduser("~")
+power_menu_script_path = os.path.join(home_dir, ".config/rofi/applets/power/power.sh")
+
 @hook.subscribe.startup
 def autostart():
 	home = os.path.expanduser('~')
@@ -97,6 +100,7 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawn("rofi -show drun"), desc="Run rofi in drun mode"),
+	Key([mod], "p", lazy.spawn(power_menu_script_path), desc="Run Power Menu"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
