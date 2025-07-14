@@ -58,4 +58,8 @@ for src_rel in "${!LINKS[@]}"; do
   ln -sfn "$SRC" "$DST"
 done
 
+# 5) Make relevant files executable
+
+chmod +x $HOME/.config/rofi/applets/power/power.sh
+
 echo "→ Configuration deployment complete."
