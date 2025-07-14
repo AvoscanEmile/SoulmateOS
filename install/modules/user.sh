@@ -18,7 +18,7 @@ sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archiv
 
 # 4. Installing UX enhancers
 echo "Installing UX enhancers..."
-sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin
+sudo dnf install -y rsync xfce4-notifyd xfce4-screenshooter xfce4-clipman-plugin unzip
 
 # 5. Installing Compositor and dependencies.
 echo "Installing Compositor and dependencies..."
