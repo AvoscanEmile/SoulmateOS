@@ -148,7 +148,7 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * **11.3 Mutable Package Cache (`installed_packages.json`):** Implement the creation and management of a SoulmateOS-managed mutable cache file (e.g., `~/.local/share/soulmateos/installed_packages.json`) to track imperatively installed/removed packages.
 * **11.4 "Dirty State" Detection (Initial):** Implement a mechanism to detect unsaved manual changes in monitored user configuration directories before any `home-manager switch` operation.
 * **11.5 User Prompting for Unsaved Changes:** Integrate basic user prompts (save, discard, cancel) when unsaved changes are detected.
-* **Version Tag:** `1.3.0`
+* **11.6 `soul service` Subcommands Implementation:** Introduce `soul service` subcommands (e.g., `enable`, `disable`, `start`, `stop`, `mask`) as wrappers for `systemctl --user`, handling Nix-managed service unit files and symbolic links to `~/.config/systemd/user/`.
 
 ## Phase 12 — `soul save` & Declarative State Conservation
 
@@ -158,17 +158,17 @@ A structured, modular approach to building a lightweight, secure, and cohesive L
 * **12.2 Configuration File Change Capture:** Develop the logic to compare current file content against a baseline and capture modified or newly created text-based configuration files.
 * **12.3 Dynamic `home.nix` Generation (File References):** Implement dynamic generation of a new Nix module (e.g., `auto-generated-config.nix`) that uses `home.file."<path>".source = ./path/to/file;` to declaratively manage captured configuration files. Ensure the actual files are copied into a SoulmateOS-managed local repository structure.
 * **12.4 Package List Synchronization:** Implement the logic within `soul save` to read `installed_packages.json` and update the `home.packages` list in the main `home.nix` configuration.
-* **12.5 Declarative Deployment Trigger:** Trigger `home-manager switch` after updating the declarative configuration to apply changes and create a new generation.
-* **Version Tag:** `1.4.0`
+* **12.5 Service Declarative Conservation:** Implement the logic within `soul save` to detect services explicitly enabled via `soul service enable` (by scanning `~/.config/systemd/user/` for Nix symlinks) and translate these into `services.<service-name>.enable = true;` declarations within the `home.nix` configuration.
+* **12.6 Declarative Deployment Trigger:** Trigger `home-manager switch` after updating the declarative configuration to apply changes and create a new generation.
 
-## Phase 13 — "Rice" Management: `soul save-de` & `soul switch-de`
+## Phase 13 — Desktop Environment Management: `soul save-de` & `soul switch-de`
 
-**Goal:** Implement the "rice" (Desktop Environment profile) management system, allowing users to save and switch between distinct DEs.
+**Goal:** Implement the Desktop Environment profile management system, allowing users to save and switch between distinct DEs.
 
 * **13.1 `soul save-de <de-name>` Implementation:** Develop the command to create a persistent Nix GC root pointing to the current active Home Manager generation, preventing it from being garbage collected.
 * **13.2 `soul switch-de <de-name>` Implementation:** Develop the command to switch to a saved DE generation using `home-manager switch --switch-to <path-to-de-generation>`.
 * **13.3 Graphical Session Restart/Prompt:** Integrate a mechanism to prompt for or attempt a graphical session restart after switching DEs.
-* **13.4 Default "Rice" Profiles:** Prepare 5-6 default "rice" profiles (Nix configurations) to be shipped with SoulmateOS, leveraging the 1.0.0 environment as the base for one of these.
+* **13.4 Default "Rice" Profiles:** Prepare 5-6 default "rice" profiles (Nix configurations) to be shipped with SoulmateOS, leveraging the 1.0.0 environment as the base for one of these. Select 3 major DEs, and 3 custom made DEs (Two inspired from r/unixporn and the default one being the one crafter for v1.0)
 * **Version Tag:** `1.5.0`
 
 ## Phase 14 — Robustness, Usability & Documentation Refinement
