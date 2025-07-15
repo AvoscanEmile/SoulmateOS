@@ -40,6 +40,8 @@ declare -A LINKS=(
   [themes/fonts]="$HOME/.local/share/fonts"
   [themes/gtk]="$HOME/.local/share/themes"
   [themes/icons]="$HOME/.local/share/icons"
+  [config/geany/geany.conf]="$HOME/.config/geany/geany.conf"
+  [config/geany/colorschemes]="$HOME/.config/geany/colorschemes"
 )
 
 # 4) Create symlinks
