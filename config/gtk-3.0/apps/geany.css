@@ -1,0 +1,34 @@
+#GeanyMenubar {
+padding: 4px 10px;
+}
+
+#treeview6 {
+margin: 10px;
+padding: 2px;
+background-color: @background;
+}
+
+#notebook3 {
+padding: 5px;
+background-color: @background;
+}
+
+#notebook1 > header > tabs > tab{
+margin-bottom: 2px;
+}
+
+#notebook1 > stack {
+margin-top: 10px;
+}
+
+#hpaned1 {
+background-color: @unfocused_text;
+}
+
+#geany-document-status-changed {
+color: @urgent;
+}
+
+#entry_docfilter {
+min-width: 100px;
+}
