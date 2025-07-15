@@ -8,13 +8,13 @@ curl -L https://nixos.org/nix/install | sh
 
 # 2. Basic Apps Installation
 echo "Installing basic desktop apps..."
-sudo dnf install -y kitty geany thunar btop gnome-disk-utility gthumb
-nix-env -iA nixpkgs.rofi
+sudo dnf install -y kitty btop gnome-disk-utility gthumb
+nix-env -iA nixpkgs.rofi nixpkgs.geany nixpkgs.thunar
 
 # 3. Installing user-level apps
 echo "Installing desktop apps..."
 nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse nixpkgs.polybar nixpkgs.eww
-sudo dnf install -y firefox geany-plugins-markdown engrampa evince thunar-archive-plugin
+sudo dnf install -y firefox engrampa evince thunar-archive-plugin
 
 # 4. Installing UX enhancers
 echo "Installing UX enhancers..."
