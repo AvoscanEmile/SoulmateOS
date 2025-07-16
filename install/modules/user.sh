@@ -13,8 +13,8 @@ nix-env -iA nixpkgs.rofi nixpkgs.geany nixpkgs.thunar
 
 # 3. Installing user-level apps
 echo "Installing desktop apps..."
-nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse nixpkgs.polybar nixpkgs.eww
-sudo dnf install -y firefox engrampa evince thunar-archive-plugin
+nix-env -iA nixpkgs.celluloid nixpkgs.lollypop nixpkgs.foliate nixpkgs.calcurse nixpkgs.polybar nixpkgs.eww nixpkgs.firefox
+sudo dnf install -y engrampa evince thunar-archive-plugin
 
 # 4. Installing UX enhancers
 echo "Installing UX enhancers..."
