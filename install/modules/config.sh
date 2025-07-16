@@ -60,8 +60,9 @@ for src_rel in "${!LINKS[@]}"; do
   ln -sfn "$SRC" "$DST"
 done
 
-# 5) Make relevant files executable
+# 5) Make relevant files executable and add some quick fixes to other files. 
 
 chmod +x $HOME/.config/rofi/applets/power/power.sh
+echo "export PS1='[\\W] '" >> ~/.bashrc
 
 echo "→ Configuration deployment complete."
