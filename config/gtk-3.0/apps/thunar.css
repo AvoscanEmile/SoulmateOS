@@ -1,0 +1,7 @@
+.thunar > grid > menubar {
+padding: 3px 9px;
+}
+
+.thunar > grid > paned > box > scrolledwindow {
+min-width: 149px;
+}
