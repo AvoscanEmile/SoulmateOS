@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# This script install and configures x11 and lightDM with the GTK Greeter
-echo "Installing X11 and LightDM..."
+# This script installs, and enables SDDM
+echo "Installing and Enabling Display Manager (SDDM)..."
 sudo dnf update -y
-sudo dnf groupinstall -y "base-x"
-sudo dnf install -y lightdm lightdm-gtk-greeter
-sudo touch /etc/rc.d/rc.local
-sudo chmod +x /etc/rc.d/rc.local
-sudo systemctl enable lightdm
+sudo dnf install -y epel-release sddm
+sudo systemctl enable sddm
 sudo systemctl set-default graphical.target
+echo "Succesful Installation of the Display Manager"
