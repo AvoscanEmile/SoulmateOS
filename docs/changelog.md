@@ -57,3 +57,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed all previous entries inside `/devlogs` so they follow a more standard naming convetion and structure. 
 ### Removed
 - Removed `.gitkeep` files that were no longer necessary.
+
+## [0.6.0] - 2025-July-19
+### Changed
+- Changed `LICENSE`
+- Changed `README.md`
+- Changed `config/qtile/autostart.sh`
+- Changed `config/qtile/config.py`
+- Changed `docs/architecture.md`
+- Changed `docs/roadmap.md`
+- Changed `install/README.md`
+- Changed `install/installation.sh`
+
+### Added
+- Added `config/eww/eww.css`
+- Added `config/eww/eww.yuck`
+- Added `config/eww/scripts/volume-monitor.sh`
+- Added `config/geany/colorschemes/nord.conf`
+- Added `config/geany/geany.conf`
+- Added `config/gtk-3.0/apps/geany.css`
+- Added `config/gtk-3.0/apps/thunar.css`
+- Added `config/gtk-3.0/colors.css`
+- Added `config/gtk-3.0/fonts.css`
+- Added `config/gtk-3.0/gtk.css`
+- Added `config/gtk-3.0/settings.ini`
+- Added `config/kitty/kitty.conf`
+- Added `config/others/.Xresources`
+- Added `config/picom/picom.conf`
+- Added `config/polybar/config.ini`
+- Added `config/polybar/scripts/change-config.sh`
+- Added `config/polybar/scripts/network.sh`
+- Added `config/polybar/scripts/qtile-groups.sh`
+- Added `config/polybar/scripts/volume.sh`
+- Added `config/rofi/applets/power/power.sh`
+- Added `config/rofi/applets/power/theme.rasi`
+- Added `config/rofi/themes/shared/colors.rasi`
+- Added `config/rofi/themes/shared/fonts.rasi`
+- Added `config/rofi/themes/soulmate_solid_fullscreen_left.rasi`
+- Added `config/rofi/themes/soulmate_solid_fullscreen_top.rasi`
+- Added `config/rofi/themes/soulmate_solid_left.rasi`
+- Added `config/rofi/themes/soulmate_solid_top.rasi`
+- Added `config/scripts/change-themes.sh`
+- Added `devlogs/10-entry.md`
+- Added `devlogs/11-entry.md`
+- Added `devlogs/12-entry.md`
+- Added `devlogs/13-entry.md`
+- Added `devlogs/14-entry.md`
+- Added `devlogs/15-entry.md`
+- Added `devlogs/16-entry.md`
+- Added `devlogs/17-entry.md`
+- Added `devlogs/18-entry.md`
+- Added `devlogs/19-entry.md`
+- Added `devlogs/20-entry.md`
+- Added `devlogs/21-entry.md`
+- Added `install/modules/config.sh`
+- Added `install/modules/graphics.sh`
+- Added `install/modules/qtile.sh`
+- Added `install/modules/user.sh`
+- Added `themes/fonts/Font Awesome 6 Free-Solid-900.otf`
+- Added `themes/fonts/Inconsolata-VariableFont_wdth,wght.ttf`
+- Added `themes/fonts/JetBrains-Mono-Nerd-Font-Complete.ttf`
+- Added `themes/fonts/NotoColorEmoji-Regular.ttf`
+- Added `themes/gtk/Nordic.tar.xz`
+- Added `themes/icons/03-Layan-white-cursors.tar.xz`
+- Added `themes/icons/Nordzy-dark.tar.gz`
+- Added `themes/polybar_theme.ini`
+
+### Removed
+- Removed `install/install-links.sh`
+- Removed `themes/.gitkeep`
