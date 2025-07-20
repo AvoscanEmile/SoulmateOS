@@ -1,226 +1,181 @@
-# SoulmateOS Roadmap
+# **SoulmateOS Roadmap v2.0**
 
-A structured, modular approach to building a lightweight, secure, and cohesive Linux-based environment using AlmaLinux Minimal and Qtile, evolving into a cross-distribution meta-distro platform.
+## **Introduction**
 
-## Phase 0 — Github repo creation
+This document outlines the official development roadmap for SoulmateOS. The project's mission is to create a cross-distro "Desktop Environment Manager" that allows users to build a deeply personalized and reproducible desktop environment on top of any major Linux distribution. This is achieved through an innovative "imperative editing, declarative conservation" model, which combines intuitive, direct modification with the power of a declarative Nix-based backend.
 
-**Goal:** Create the github repo with the basic structure, and the initial documentation.
+The plan below is structured as a series of comprehensive phases, charting the course from our validated foundational work to the final, stable `v1.0.0` release. Each phase represents a significant development milestone with a corresponding version tag. The preamble that follows this introduction provides crucial context on the project's history and the strategic pivot that led to this current, validated development plan.
 
-* Add every relevant folder the project will have
-* Add architecture.md, changelog.md, and roadmap.md to /docs
-* Write initial `README.md`
-* Choose a license.
-* **Version Tag:** `0.1.0`
+## **Phase 1: Foundational Validation & Core Environment Setup**
 
-## Phase 1 — AlmaLinux installation and Qtile installation
+**High-Level Goal:** To establish a stable, minimal, and reproducible base system on Debian that explicitly validates the compatibility between the host OS and a Nix-managed graphical stack, preventing a repeat of the AlmaLinux failure.
 
-**Goal:** Set the barebones of the project in place.
+**Breadth and Depth of Tasks:**
+* **1.1 Host OS Installation & Configuration:**
+    * Script the installation of a minimal, headless Debian system, codifying the successful manual process from Devlog 21. This includes automating UEFI/BIOS settings checks, disk partitioning (with a dedicated EFI partition), and forcing GRUB installation to the removable media path for maximum compatibility.
+    * Install essential host-level system packages required for a graphical environment, such as `sddm`, `xwayland`, core Wayland libraries, and `libglvnd-glx`.
+* **1.2 Nix Integration & Graphics Stack Validation:**
+    * Install the Nix package manager on the Debian host.
+    * Use Nix to install a core set of graphical packages: `hyprland`, `kitty`, and the latest stable `mesa` drivers. This is the most critical validation step.
+    * Create a minimal, valid `hyprland.conf` to handle basic inputs and launch a terminal.
+* **1.3 Session Management & Integration:**
+    * Create a `hyprland.desktop` file for SDDM to discover the Wayland session.
+    * Diagnose and resolve the SDDM user-session discovery issue encountered in Devlog 21. This may involve creating a system-level session file that launches a user-level script, ensuring a seamless login experience.
+    * **Success Metric:** The user can successfully log in via SDDM and be dropped into a functional Hyprland session where a Nix-managed Kitty terminal can be opened without any `gbm` or `EGL` errors.
 
-* Install Alma Linux
-* Install Qtile and X11
-* Install a lightweight login manager
-* Boot into graphical environment
-* Install minimal terminal and file manager
-* **Version Tag:** `0.2.0`
+## **Phase 2: Declarative User Environment & Application Layer**
 
-## Phase 2 — System Utilities Layer + Git Setup
+**High-Level Goal:** To build the complete, functional desktop by declaratively managing the entire user environment with Nix Home Manager, thereby avoiding the ad-hoc integration problems identified in Devlog 20.
 
-**Goal:** Add foundational system tools to ensure a robust and manageable base. Add git to host a local repo, to keep track of any config changes.
+**Breadth and Depth of Tasks:**
+* **2.1 Home Manager Implementation:**
+    * Install and configure Nix Home Manager as the single source of truth for the user's environment.
+    * Structure the Home Manager configuration into logical, modular files (e.g., `apps.nix`, `services.nix`, `theming.nix`).
+* **2.2 Application Suite Deployment:**
+    * Using the `home.packages` option in Home Manager, install the full suite of user-facing applications selected in `architecture.md`. This includes:
+        * **Core Tools:** Thunar, Geany, Rofi.
+        * **Media Stack:** Firefox, Celluloid, Lollypop, gThumb.
+        * **Utilities:** Engrampa, Evince, Foliate, Calcurse.
+* **2.3 Declarative Service Management:**
+    * Utilize Home Manager's `services` module to manage background daemons like `xfce4-notifyd` and `xfce4-clipman`. This approach ensures services are started correctly with the proper environment, directly solving the D-Bus "split-brain" and `PATH` issues from Devlog 20.
+    * **Success Metric:** A fully-featured, application-rich desktop is deployed from a single `home-manager switch` command.
 
-* Terminal emulator
-* File manager
-* Text editor
-* Network manager
-* System monitor
-* Disk utility
-* Time synchronization daemon (e.g., chrony or ntp)
-* Package manager plugins (preinstalled, verify only)
-* Log management tools (journalctl, logrotate)
-* **Version Tag:** `0.3.0`
+## **Phase 3: Visual Cohesion & Theming Pipeline Implementation**
 
-## Phase 3 — User Applications Layer
+**High-Level Goal:** To implement the "Theming Pipeline 2.0" architecture designed in Devlog 20 to create the project's signature unified aesthetic across all system components.
 
-**Goal:** Add commonly expected user-facing applications.
+**Breadth and Depth of Tasks:**
+* **3.1 Build the Theming Pipeline Engine:**
+    * Create the central `themes.conf` file to act as a master source for all non-GTK color variables (e.g., full 16-color ANSI palettes).
+    * Develop the `apply-themes.sh` script, which reads from `themes.conf` and the live GTK settings to programmatically generate configuration files for all target applications.
+* **3.2 System-Wide Theme Deployment:**
+    * Manage the base GTK theme (Nordic), icons (nordzy), and cursors (Layan-white-cursors) via Home Manager.
+    * Use the pipeline to apply consistent theming to:
+        * Kitty terminal (foreground, background, all ANSI colors).
+        * The Wayland status bar/widgets that will replace Polybar.
+        * Rofi's `.rasi` configuration file.
+        * Geany's internal color schemes.
+* **3.3 Compositor and WM Configuration:**
+    * Fully configure Hyprland for aesthetics, including window borders, gaps, corner radius, animations, and shadows to align with the overall theme.
+    * Establish a complete and intuitive set of keybindings for all window management, application launching, and system controls.
+    * **Success Metric:** The entire desktop environment, from the login screen to every application, shares a single, consistent, and professionally designed visual language.
 
-* Web browser
-* Media player
-* Office/markdown tool
-* Image viewer
-* Archiver
-* Password manager
-* PDF viewer
-* Calendar
-* **Version Tag:** `0.4.0`
+## **Phase 4: System Automation & Reproducibility Scripting**
 
-## Phase 4 — UX Enhancers & Session Polish
+**High-Level Goal:** To create a fully automated, idempotent installation process that can deploy the entire SoulmateOS environment from a bare Debian install to a fully configured desktop.
 
-**Goal:** Complete the user experience with session utilities.
+**Breadth and Depth of Tasks:**
+* **4.1 Develop the Installation Orchestrator (`install.sh`):**
+    * This master script will guide the entire process.
+    * It will handle command-line flags (e.g., `--hardened`, `--developer`) to install different sets of packages as planned in the original architecture.
+* **4.2 Host OS Setup Module:**
+    * This sub-script, called by the orchestrator, will automate the Debian installation steps defined in Phase 1. It must be able to run on a bare-metal or VM target.
+* **4.3 SoulmateOS Deployment Module:**
+    * This module takes over post-reboot. It will:
+        1.  Install the Nix package manager.
+        2.  Clone the project's Home Manager configuration repository from Git.
+        3.  Execute the first `home-manager switch` to build and deploy the entire user environment.
+    * **Success Metric:** A single command (`./install.sh`) can be executed on a machine with a Debian installer USB, resulting in a fully installed and configured SoulmateOS system with no further manual intervention required.
 
-* Notification daemon
-* Screenshot tool
-* Clipboard manager
-* Autostart configuration
-* **Version Tag:** `0.5.0`
+## **Phase 5: `soul` CLI for Declarative State Management**
 
-## Phase 5 — Theming, Visual Cohesion, Widget Addition and Error Correction.
+**High-Level Goal:** To build the `soul` CLI, the primary user-facing tool for managing the system via the "imperative editing, declarative conservation" model outlined in the original roadmap.
 
-**Goal:** Build a unified aesthetic, a base widget environment and resolve any problems related to app usage.
+**Breadth and Depth of Tasks:**
+* **5.1 Develop Imperative Wrapper Commands:**
+    * Implement `soul install <package>` and `soul remove <package>` to modify the user's Nix profile while also updating a state-tracking file (e.g., `installed_packages.json`).
+* **5.2 Implement Change Detection:**
+    * Create a mechanism for the `soul` tool to hash or otherwise track the state of key configuration files within monitored directories like `~/.config`.
+    * Develop `soul status` to report on packages that have been imperatively changed and config files that have been modified since the last `save`.
+* **5.3 Build the Declarative Conservation Engine (`soul save`):**
+    * This is the cornerstone of the phase. The `soul save` command must:
+        1.  Read the `installed_packages.json` cache and update the `home.packages` list in the Nix configuration.
+        2.  Compare current config files against their baseline and copy any modified files into the local Git repository.
+        3.  Programmatically generate or update a Nix module (e.g., `auto-generated.nix`) to point `home.file` declarations to these newly saved files.
+        4.  Trigger a `home-manager switch` to apply the newly declared state, creating a new, persistent generation.
+    * **Success Metric:** A user can install a new application, tweak a config file manually, and run `soul save` to make those changes a permanent, declarative part of their system configuration.
 
-* Install and theme Polybar with the following modules (power menu, workspaces, weather, date and time, network + volume)
-* Build relevant custom widgets with Eww. Build one for the each of the relevant modules (weather, date and time, network + volume)
-* Add a dropdown grid-like widget layout where all the system information shows up
-* Configure all relevant Qtile keybindings
-* GTK theming all relevant apps
-* Fonts and icons
-* Wallpaper, cursor
-* Align visuals across all apps
-* Lightweight compositor (picom) for transparency, shadows, and effects
-* Save everything relevant in `themes/`
-* Add the symlinking and installation process to their relevant files
-* **Version Tag:** `0.6.0`
+## **Phase 6: Multi-Profile Architecture & Cross-Distro Expansion**
 
-## Phase 6 — Security Hardening
+**High-Level Goal:** To abstract the complete desktop environment into swappable "rices" and validate the installation process on at least one other major Linux distribution family, fulfilling the meta-distro vision.
 
-**Goal:** Lightweight but strong security baseline.
+**Breadth and Depth of Tasks:**
+* **6.1 Implement "Rice" Management:**
+    * Develop `soul save-de <de-name>` to create a persistent GC root for the current Home Manager generation, effectively saving a snapshot of the entire DE.
+    * Develop `soul switch-de <de-name>` to activate a previously saved generation.
+* **6.2 Package Default Profiles:**
+    * Package the main SoulmateOS theme as the default "rice."
+    * Create at least two other distinct "rices" (e.g., one ultra-minimalist, one more feature-rich) to demonstrate the flexibility of the system and provide users with out-of-the-box choices.
 
-* Configure `firewalld` or `nftables`
-* Harden SSH (disable root, change port)
-* Enable SELinux
-* Disable unnecessary services
-* Document security in `docs/security.md`
-* **Version Tag:** `0.7.0`
+* **Success Metric:** On the Debian reference system, a user can create, save, and switch between multiple distinct desktop profiles using the soul CLI.
+## **Phase 7: Fedora Family Integration**
+**High-Level Goal:** To achieve full feature-parity and automated installation on Fedora, the second major target distribution family.
+* **7.1 Host Environment Analysis:**
+    * Research Fedora's minimal installation process and identify the equivalent base packages for a graphical session (e.g., Wayland libraries, Mesa drivers, SDDM).
+    * Analyze default security configurations, specifically SELinux, and develop troubleshooting guides or configuration adjustments to ensure Nix-managed applications run without issues.
+* **7.2 Develop Fedora Installer Module:**
+    * Create a new script module (`install/fedora.sh`) for the installation orchestrator. This module will handle Fedora-specific tasks, using `dnf` for host package installation.
+* **7.3 Adapt Dependency Mapping:**
+    * Update the main `install.sh` script to recognize a `--distro=fedora` flag and call the appropriate module with the correct package names.
+* **7.4 Full-Stack Validation:**
+    * Execute a complete, automated installation and testing cycle on a Fedora target. Document and resolve any distribution-specific bugs or incompatibilities.
 
-## Phase 7 — Automation, Optimization and Reproducibility
+## **Phase 8: Arch Family Integration**
+**High-Level Goal:** To expand support to the Arch Linux ecosystem, accommodating its rolling-release nature and distinct packaging tools.
+* **8.1 Host Environment Analysis:**
+    * Map the required host dependencies to their package names in the official Arch repositories.
+    * Investigate if any essential dependencies would need to be sourced from the Arch User Repository (AUR) and plan the automation strategy accordingly.
+* **8.2 Develop Arch Installer Module:**
+    * Create an `install/arch.sh` module that uses `pacman` for host system setup. This will likely involve scripting `pacstrap` for the base installation.
+* **8.3 Testing on a Rolling Base:**
+    * Perform full-stack validation on a fresh Arch Linux installation. Pay special attention to potential breakages that could be caused by the rolling-release model and document a clear support policy.
 
-**Goal:** Optimize and automate deployment of the entire environment.
+## **Phase 9: openSUSE Family Integration**
+**High-Level Goal:** To complete the core cross-distro support by integrating with the openSUSE family.
+* **9.1 Host Environment Analysis:**
+    * Research openSUSE's "patterns" system for installation and identify the minimal set required for a graphical host.
+    * Map dependencies to their `zypper` package names.
+* **9.2 Develop openSUSE Installer Module:**
+    * Create an `install/opensuse.sh` module to handle system setup using `zypper`.
+* **9.3 Final Integration Testing:**
+    * Conduct a full installation and testing cycle on a target openSUSE system (e.g., Tumbleweed) to ensure complete functionality.
 
-* Minimize default packages with the usage of dng-graph
-* Bash or Ansible-based installer
-* Dotfile deployment
-* Scripted security and config setup
-* Test in VM for reproducibility
-* **Version Tag:** `0.8.0`
-
-## Phase 8 — Finalization and 1.0 Release
-
-**Goal:** Final testing, cleanup, and release.
-
-* Final QA and stress test
-* Polish all documentation
-* Tag release as `1.0.0`
-* Optional: Build ISO
-* **Version Tag:** `1.0.0`
-
-## Phase 9 — Core OS Foundation & Cross-Distro Base Integration
-
-**Goal:** Establish the minimal, essential host distribution layer on multiple target distributions, ensuring a functional graphical base system for Nix to build upon. This phase defines the boundaries between the host distribution's responsibilities and Nix's capabilities.
-
-* **9.1 Distribution Landscape Analysis & Selection:** Identify 2-3 target major distributions (e.g., AlmaLinux, Debian/Ubuntu, Fedora, Arch) for initial compatibility. Research their package managers (`apt`, `dnf`, `pacman`), init systems (`systemd` specifics), and common filesystem layout variations.
-* **9.2 Minimal Core OS Installation Scripting:** Develop a base installation script (`installation.sh`) that performs a standard minimal installation of the chosen host distribution.
-* **9.3 Essential System-Level Components Installation:** Implement conditional logic within `installation.sh` to install the few *additional* essential system-level components for a graphical base, managed by the host distro's package manager:
-    * `dbus`, `polkit`
-    * X.Org Server, Mesa, & Core X11 Libraries (`base-x` or equivalents)
-    * Wayland Protocol Libraries & Xwayland
-    * Display Manager (`sddm` recommended, or `gdm`/`lightdm`)
-    * Networking components (`NetworkManager`, etc.)
-    * Filesystem support (`udisks2`, `gvfs`, etc.)
-    * Essential shared libraries (`libstdc++`, `zlib`, etc.)
-    * Basic console tools and system security frameworks (`firewalld`/`ufw`, SELinux/AppArmor)
-* **9.4 Configure Default Graphical Target:** Ensure `sudo systemctl set-default graphical.target` is executed to boot into the graphical environment.
-* **Version Tag:** `1.1.0`
-
-## Phase 10 — Nix Integration & Initial User Environment Deployment
-
-**Goal:** Integrate Nix as the declarative manager for the user environment, building upon the established host OS foundation.
-
-* **10.1 Nix Package Manager Installation:** Implement the installation of the Nix package manager on the host system.
-* **10.2 SoulmateOS Home Manager Configuration Repository Cloning:** Script the cloning of the `home.nix` configuration repository (the future default "rice" profile).
-* **10.3 Initial Home Manager Activation:** Implement the initial activation of Home Manager using the cloned configuration, declaratively deploying the default user desktop environment (e.g., Wayland compositor, X11 WM, default terminal).
-* **10.4 Basic Environment Validation:** Verify that the display manager loads, the chosen window manager/compositor starts, and a terminal (e.g., Kitty, if Nix-managed) can be opened.
-* **Version Tag:** `1.2.0`
-
-## Phase 11 — `soul` CLI Development: Imperative Control Foundation
-
-**Goal:** Develop the core `soul` command-line interface for imperative package management and the "dirty state" detection mechanism.
-
-* **11.1 `soul install <package-name>` Implementation:** Develop the initial `soul install` command to perform immediate user-level imperative installations using `nix-env -iA nixpkgs.<package-name>` (or `nix profile install nixpkgs#<package-name>`).
-* **11.2 `soul remove <package-name>` Implementation:** Develop the initial `soul remove` command to perform immediate user-level imperative removals using `nix-env -e <package-name>`.
-* **11.3 Mutable Package Cache (`installed_packages.json`):** Implement the creation and management of a SoulmateOS-managed mutable cache file (e.g., `~/.local/share/soulmateos/installed_packages.json`) to track imperatively installed/removed packages.
-* **11.4 "Dirty State" Detection (Initial):** Implement a mechanism to detect unsaved manual changes in monitored user configuration directories before any `home-manager switch` operation.
-* **11.5 User Prompting for Unsaved Changes:** Integrate basic user prompts (save, discard, cancel) when unsaved changes are detected.
-* **11.6 `soul service` Subcommands Implementation:** Introduce `soul service` subcommands (e.g., `enable`, `disable`, `start`, `stop`, `mask`) as wrappers for `systemctl --user`, handling Nix-managed service unit files and symbolic links to `~/.config/systemd/user/`.
-
-## Phase 12 — `soul save` & Declarative State Conservation
-
-**Goal:** Implement the pivotal `soul save` command to translate imperative user modifications into a declarative Nix configuration.
-
-* **12.1 Monitored Directories Definition:** Define the set of user-owned directories (e.g., `~/.config/`, `~/.local/share/`) that `soul save` will monitor for changes.
-* **12.2 Configuration File Change Capture:** Develop the logic to compare current file content against a baseline and capture modified or newly created text-based configuration files.
-* **12.3 Dynamic `home.nix` Generation (File References):** Implement dynamic generation of a new Nix module (e.g., `auto-generated-config.nix`) that uses `home.file."<path>".source = ./path/to/file;` to declaratively manage captured configuration files. Ensure the actual files are copied into a SoulmateOS-managed local repository structure.
-* **12.4 Package List Synchronization:** Implement the logic within `soul save` to read `installed_packages.json` and update the `home.packages` list in the main `home.nix` configuration.
-* **12.5 Service Declarative Conservation:** Implement the logic within `soul save` to detect services explicitly enabled via `soul service enable` (by scanning `~/.config/systemd/user/` for Nix symlinks) and translate these into `services.<service-name>.enable = true;` declarations within the `home.nix` configuration.
-* **12.6 Declarative Deployment Trigger:** Trigger `home-manager switch` after updating the declarative configuration to apply changes and create a new generation.
-
-## Phase 13 — Desktop Environment Management: `soul save-de` & `soul switch-de`
-
-**Goal:** Implement the Desktop Environment profile management system, allowing users to save and switch between distinct DEs.
-
-* **13.1 `soul save-de <de-name>` Implementation:** Develop the command to create a persistent Nix GC root pointing to the current active Home Manager generation, preventing it from being garbage collected.
-* **13.2 `soul switch-de <de-name>` Implementation:** Develop the command to switch to a saved DE generation using `home-manager switch --switch-to <path-to-de-generation>`.
-* **13.3 Graphical Session Restart/Prompt:** Integrate a mechanism to prompt for or attempt a graphical session restart after switching DEs.
-* **13.4 Default "Rice" Profiles:** Prepare 5-6 default "rice" profiles (Nix configurations) to be shipped with SoulmateOS, leveraging the 1.0.0 environment as the base for one of these. Select 3 major DEs, and 3 custom made DEs (Two inspired from r/unixporn and the default one being the one crafter for v1.0)
-* **Version Tag:** `1.5.0`
-
-## Phase 14 — Robustness, Usability & Documentation Refinement
-
-**Goal:** Enhance the reliability, user-friendliness, and documentation of the entire SoulmateOS system.
-
-* **14.1 Comprehensive Error Handling:** Implement robust error handling and informative messages across all `soul` commands and installation scripts.
-* **14.2 Idempotency & Basic Rollback:** Ensure all scripts are idempotent and consider basic rollback mechanisms for installations/rice applications.
-* **14.3 Improved User Interaction:** Refine user prompts and interactive choices within all `soul` commands (e.g., clearer "dirty state" options).
-* **14.4 Initial Troubleshooting Guides:** Develop clear documentation for common troubleshooting scenarios, especially related to SELinux.
-* **14.5 User Guidelines Enforcement:** Document clear guidelines for users regarding actions outside `soul` commands and their implications, emphasizing that following guidelines ensures support.
-* **Version Tag:** `1.6.0`
-
-## Phase 15 — Community, Advanced Features & Performance
-
-**Goal:** Foster a community-driven ecosystem, explore performance optimizations, and lay groundwork for advanced "rice" features.
-
-* **15.1 "Rice" Showcase & Discovery (Conceptual):** Plan a mechanism for users to discover and browse available SoulmateOS "rices" (e.g., a dedicated GitHub topic, simple web page).
-* **15.2 Contributing Guidelines for "Rice" Creators:** Create detailed guidelines for "rice" creators, including best practices, licensing, and packaging standards for `soul save` compatibility.
-* **15.3 Performance Optimization Review:** Review and optimize script execution speed and resource usage, particularly for `soul save` with larger configurations.
-* **15.4 Meta-Distro Documentation Expansion:** Update `architecture.md` and other documentation to fully reflect the meta-distro vision, supported distributions, installation nuances, and troubleshooting.
-* **15.5 Optional: "Rice" Versioning & Dependencies (Research):** Begin research into potential versioning for "rices" and handling inter-rice dependencies.
-* **Version Tag:** `1.7.0`
-
-## Phase 16 — SoulmateOS 2.0.0 Final Release
-
-**Goal:** Conduct final testing, comprehensive documentation, and officially release SoulmateOS 2.0.0 as a cross-distribution meta-distro platform with robust "imperative editing, declarative conservation" management.
-
-* **16.1 Final QA & Stress Testing:** Extensive testing across all supported distributions, focusing on stability, performance, and seamless integration of all components and `soul` commands.
-* **16.2 Comprehensive Documentation Polish:** A thorough review and polish of all project documentation, ensuring accuracy, clarity, and completeness for new and existing users.
-* **16.3 Community Launch & Announcement:** Prepare release announcements and engage with the community to introduce the new capabilities of SoulmateOS 2.0.0.
-* **16.4 Tag Release:** Officially tag the `2.0.0` version in the Git repository.
-* **Version Tag:** `2.0.0`
+## **Phase 10: Finalization, Community, and 2.0.0 Release**
+**High-Level Goal:** To polish the project, its documentation, and its community resources for an official 2.0.0 release as a mature, cross-distribution platform.
+* **10.1 Comprehensive QA and Hardening:**
+    * Conduct a final round of stress testing and QA across all four supported distribution families (Debian, Fedora, Arch, openSUSE).
+    * Implement the final security hardening measures as outlined in the original `architecture.md` on all platforms.
+* **10.2 Documentation and Community Resources:**
+    * Perform a thorough review and polish of all project documentation, ensuring it is clear, accurate, and complete for users on any supported distro.
+    * Create detailed contribution guidelines for users who want to submit new "rices" or bug fixes.
+* **10.3 Official Release:**
+    * Prepare official release announcements for the community.
+    * Tag the `2.0.0` version in the Git repository, marking the completion of the meta-distro vision.
 
 ## Summary Table
 
-| Phase | Focus Area | Tag |
-|---|---|---|
-| 0 | Bootstrap + Git + Docs | `0.1.0` |
-| 1 | Qtile Base Setup | `0.2.0` |
-| 2 | System Utilities Layer | `0.3.0` |
-| 3 | User Applications Layer | `0.4.0` |
-| 4 | UX Enhancers & Session Polish | `0.5.0` |
-| 5 | Theming & Visual Integration | `0.6.0` |
-| 6 | Security Hardening | `0.7.0` |
-| 7 | Automation, Optimization and Reproducibility | `0.8.0` |
-| 8 | QA + Docs + Final Release | `1.0.0` |
-| 9 | Core OS Foundation & Cross-Distro Base Integration | `1.1.0` |
-| 10 | Nix Integration & Initial User Environment Deployment | `1.2.0` |
-| 11 | `soul` CLI Development: Imperative Control Foundation | `1.3.0` |
-| 12 | `soul save` & Declarative State Conservation | `1.4.0` |
-| 13 | "Rice" Management: `soul save-de` & `soul switch-de` | `1.5.0` |
-| 14 | Robustness, Usability & Documentation Refinement | `1.6.0` |
-| 15 | Community, Advanced Features & Performance | `1.7.0` |
-| 16 | SoulmateOS 2.0.0 Final Release | `2.0.0` |
+| Phase | Focus Area                                         | Target Tag      |
+|:------|:---------------------------------------------------|:----------------|
+| (Legacy) | Archived AlmaLinux/X11 Prototype                  | `v0.6.0-legacy` |
+| 1     | Foundational Validation & Core Environment Setup   | `v0.1.0`        |
+| 2     | Declarative User Environment & Application Layer   | `v0.2.0`        |
+| 3     | Visual Cohesion & Theming Pipeline Implementation  | `v0.3.0`        |
+| 4     | System Automation & Reproducibility Scripting      | `v0.4.0`        |
+| 5     | `soul` CLI for Declarative State Management        | `v0.5.0`        |
+| 6     | Multi-Profile "Rice" Architecture                  | `v0.6.0`        |
+| 7     | Fedora Family Integration                          | `v0.7.0`        |
+| 8     | Arch Family Integration                            | `v0.8.0`        |
+| 9     | openSUSE Family Integration                        | `v0.9.0`        |
+| 10    | Finalization, Community, and Stable Release        | `v1.0.0`        |
+
+## Note on the Original Vision of the Project
+
+The SoulmateOS project began with the goal of creating a personalized, minimal environment on a stable, enterprise-grade foundation. However, even before significant implementation began, the project's vision underwent a major conceptual evolution. The focus shifted from creating a simple "Linux flavor" to a far more ambitious goal: developing a cross-distro "Desktop Environment Manager". The new core philosophy was to treat the host OS as a minimal, reliable base, while managing the entire user-facing environment—from the window manager to the applications and dotfiles—declaratively with Nix.
+
+A key innovation in this new design was the principle of "imperative editing, declarative conservation". This model would allow users to intuitively modify their system through a simple `soul` command-line tool, with their changes being saved back into a reproducible Nix configuration, keeping the complexity of the underlying engine invisible. The project's identity had matured into a tool for democratizing highly customized and reproducible desktops.
+
+The subsequent development work on AlmaLinux became the first practical test of this new, grander vision. The initial results were fraught with friction. Attempts to manually integrate Nix-managed services with the host's D-Bus and `systemd` layers proved brittle, highlighting the challenges of layering a modern declarative system onto a traditional host. This was followed by a series of definitive, unresolvable failures. First, a fundamental `glibc` version mismatch on AlmaLinux 9 made it impossible to run modern Nix-managed applications. Then, an attempted migration to AlmaLinux 10 was thwarted by the deprecation of Xorg sessions and, ultimately, by insurmountable graphics driver incompatibilities between the Nix-packaged Wayland stack and the host system.
+
+These technical dead ends were not merely setbacks; they were the practical validation that the project's evolved, cross-distro vision was not just preferable, but the *only* viable path forward. The experience proved that a stable but rigid enterprise-focused OS could not serve as the foundation for the flexible, user-centric environment SoulmateOS aimed to be. The pivot to a Debian base and a roadmap focused on supporting the four major desktop distribution families is, therefore, not a retreat, but the first deliberate step in executing the project's fully-realized and more ambitious mission. This roadmap reflects that journey and outlines the validated plan to deliver a truly next-generation desktop management experience. 
+
+If you want to see what was the original conceptualization of this roadmap, you can read the old roadmaps in the history of this file. If you want to go into detail about the reconceptualization of the project, it's outlined in `devlogs/17-entry.md`, `devlogs/20-entry.md`, and `devlogs/21-entry.md`.
